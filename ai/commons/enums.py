@@ -1,0 +1,8 @@
+import enum
+
+class EutrophicationLevel(enum.Enum):
+    UNKNOWN = "DESCONOCIDO"
+    OLIGOTROPHIC = "OLIGOTRÓFICO"
+    MESOTROPHIC = "MESOTRÓFICO"
+    EUTROPHIC = "EUTRÓFICO"
+    HYPEREUTROPHIC = "HIPEREUTRÓFICO"
