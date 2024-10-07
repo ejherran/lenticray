@@ -163,3 +163,7 @@ cython_debug/
 
 # Binary datasets
 *.parquet
+
+# Model files
+*.keras
+
