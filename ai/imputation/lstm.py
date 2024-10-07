@@ -44,13 +44,8 @@ def _train_model(model, knn_data, features, window_size):
 
     X, y = _create_sequences(dataset, window_size)
 
-    # División en entrenamiento y prueba
-    train_size = int(len(X) * 0.80)
-    X_train, X_test = X[:], X[train_size:]
-    y_train, y_test = y[:], y[train_size:]
-
     early_stopping = EarlyStopping(
-        monitor='loss',               # Métrica a monitorear
+        monitor='loss',                   # Métrica a monitorear
         patience=10,                      # Número de épocas sin mejora antes de detener
         verbose=0,                        # Nivel de verbosidad
         mode='min',                       # Minimizar val_loss
@@ -58,11 +53,10 @@ def _train_model(model, knn_data, features, window_size):
     )
 
     _h = model.fit(
-        X_train,
-        y_train,
+        X,
+        y,
         epochs=1000,
         batch_size=16,
-        validation_data=(X_test, y_test),
         callbacks=[
             early_stopping
         ]

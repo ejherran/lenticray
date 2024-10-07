@@ -19,6 +19,9 @@ tensorflow-cpu = "*"
 pyarrow = "*"
 fastparquet = "*"
 ipython = "*"
+redis = "*"
+pydantic = "*"
+loguru = "*"
 
 [dev-packages]
 

@@ -83,20 +83,17 @@ def _predict(X, model, window_size, features, num_predictions=12):
     return fuz_predictions
 
 
-def lstm_prediction(fuzz_data, window_size, features):
+def lstm_triain(fuzz_data, window_size, features, work_dir):
     X, y = _prepare_data(fuzz_data, features, window_size)
     model = _create_model(window_size, features)
     model = _train_model(model, X, y)
 
-    model.save('model.keras')
+    model.save(f'{work_dir}/model.keras')
 
-    fuz_predictions = _predict(X, model, window_size, features)
 
-    return fuz_predictions
-
-def only_prediction(fuzz_data, window_size, features, num_predictions=12):
+def only_prediction(fuzz_data, model_file, window_size, features, num_predictions=12):
     X, _ = _prepare_data(fuzz_data, features, window_size)
-    model = tf.keras.models.load_model('model.keras')
+    model = tf.keras.models.load_model(model_file)
     fuz_predictions = _predict(X, model, window_size, features, num_predictions)
 
     return fuz_predictions

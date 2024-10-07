@@ -85,7 +85,16 @@ def _process_data_multivariate(data):
 def _prepare_data(data_serie):
     # 1. Preparación de los Datos
     tmp_data = data_serie.copy()
-    tmp_data['Date'] = pd.to_datetime(dict(year=tmp_data.Year, month=tmp_data.Month, day=1))
+    
+    if {'Year', 'Month', 'Day'}.issubset(tmp_data.columns):
+        tmp_data['Date'] = pd.to_datetime(tmp_data[['Year', 'Month', 'Day']])
+    elif {'Year', 'Month'}.issubset(tmp_data.columns):
+        tmp_data['Date'] = pd.to_datetime(dict(year=tmp_data.Year, month=tmp_data.Month, day=1))
+    elif {'Year', 'Week'}.issubset(tmp_data.columns):
+        tmp_data['Date'] = tmp_data.apply(lambda x: pd.Timestamp.fromisocalendar(int(x['Year']), int(x['Week']), 1), axis=1)
+    else:
+        raise ValueError("The required columns are not present in the DataFrame")
+
     tmp_data.sort_values('Date', inplace=True)
     tmp_data.set_index('Date', inplace=True)
     tmp_data.drop(['Year', 'Month'], axis=1, inplace=True)
