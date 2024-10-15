@@ -68,6 +68,13 @@ def execute(
             continue
         
         try:
-            process_task(redis_cli, base_path, json.loads(task))
+            task_def = json.loads(task)
+        except json.JSONDecodeError:
+            logger.error(f'Error decoding task: {task}')
+            continue
+
+        try:
+            process_task(redis_cli, base_path, task_def)
         except Exception as e:
+            redis_cli.set(task_def['id'], 'FAILED')
             logger.error(f'Error processing task: {task}, {e}')

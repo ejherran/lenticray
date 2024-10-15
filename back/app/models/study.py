@@ -5,14 +5,16 @@ from enum import Enum as PyEnum
 from app.db.base_class import Base
 
 class TimeSpace(str, PyEnum):
-    daily = "daily"
-    weekly = "weekly"
-    monthly = "monthly"
+    DAILY = "DAILY"
+    WEEKLY = "WEEKLY"
+    MONTHLY = "MONTHLY"
 
 class StudyStatus(str, PyEnum):
     NEW = "NEW"
     TRAINING = "TRAINING"
     TRAINED = "TRAINED"
+    PENDING = "PENDING"
+    FAILED = "FAILED"
 
 class Study(Base):
     __tablename__ = "studies"

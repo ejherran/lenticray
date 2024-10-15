@@ -3,14 +3,16 @@ from pydantic import BaseModel
 from enum import Enum
 
 class TimeSpace(str, Enum):
-    daily = "daily"
-    weekly = "weekly"
-    monthly = "monthly"
+    DAILY = "DAILY"
+    WEEKLY = "WEEKLY"
+    MONTHLY = "MONTHLY"
 
 class StudyStatus(str, Enum):
     NEW = "NEW"
     TRAINING = "TRAINING"
     TRAINED = "TRAINED"
+    PENDING = "PENDING"
+    FAILED = "FAILED"
 
 class StudyBase(BaseModel):
     name: str
@@ -25,6 +27,7 @@ class StudyUpdate(BaseModel):
     name: Optional[str] = None
     time_space: Optional[TimeSpace] = None
     window_size: Optional[int] = None
+    status: Optional[StudyStatus] = None
 
 class StudyInDBBase(StudyBase):
     id: str

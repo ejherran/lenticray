@@ -139,9 +139,9 @@ function StudyCreate() {
                 onChange={(e) => setTimeSpace(e.target.value)}
                 required
               >
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
+                <option value="DAILY">Daily</option>
+                <option value="WEEKLY">Weekly</option>
+                <option value="MONTHLY">Monthly</option>
               </select>
             </div>
             <div className="mb-3">

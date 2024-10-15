@@ -64,6 +64,24 @@ function StudyList() {
     }
   };
 
+  // Manejar el inicio del entrenamiento de un estudio
+  const handleStartTraining = async (id) => {
+    if (window.confirm('Are you sure you want to start training this study?')) {
+      try {
+        await api.post(`/studies/${id}/start_training`);
+        // Actualizar el estado del estudio localmente o volver a cargar la lista
+        if (selectedProject) {
+          fetchStudies(selectedProject.value);
+        }
+        alert('Training successfully queued.');
+      } catch (error) {
+        console.error('Error starting training:', error);
+        alert('Failed to start training');
+      }
+    }
+  };
+
+
   return (
     <div>
       <h2>Studies</h2>
@@ -87,6 +105,7 @@ function StudyList() {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Dataset Name</th>
                   <th>Time Space</th>
                   <th>Window Size</th>
                   <th>Status</th>
@@ -97,24 +116,36 @@ function StudyList() {
                 {studies.map((study) => (
                   <tr key={study.id}>
                     <td>{study.name}</td>
+                    <td>{study.dataset_name || study.dataset_id}</td>
                     <td>{study.time_space}</td>
                     <td>{study.window_size}</td>
                     <td>{study.status}</td>
                     <td>
                       {study.status === 'NEW' && (
-                        <Link
-                          to={`/studies/edit/${study.id}`}
-                          className="btn btn-sm btn-secondary me-2"
-                        >
-                          Edit
-                        </Link>
+                        <>
+                          <Link
+                            to={`/studies/edit/${study.id}`}
+                            className="btn btn-sm btn-secondary me-2"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleStartTraining(study.id)}
+                            className="btn btn-sm btn-success me-2"
+                          >
+                            Start Training
+                          </button>
+                        </>
                       )}
-                      <button
-                        onClick={() => handleDelete(study.id)}
-                        className="btn btn-sm btn-danger"
-                      >
-                        Delete
-                      </button>
+                      {/* Mostrar el botón de eliminar solo si el estado no es PENDING o TRAINING */}
+                      {!['PENDING', 'TRAINING'].includes(study.status) && (
+                        <button
+                          onClick={() => handleDelete(study.id)}
+                          className="btn btn-sm btn-danger"
+                        >
+                          Delete
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -5,7 +5,6 @@ from app import models
 
 def init_variables(db: Session) -> None:
     variables_data = [
-        {"id": "Chl_a", "name": "Chlorophyll A", "description": "Amount of chlorophyll A in water", "unit": "mg/l"},
         {"id": "DIN", "name": "Inorganic Nitrogen", "description": "Sum of Nitrite (NO2N), Nitrate (NO3N) and Total Ammonia Nitrogen (NH4N) in filtered samples.", "unit": "mg/l"},
         {"id": "DKN", "name": "Kjeldahl Nitrogen", "description": "Organic nitrogen and total ammonia nitrogen fractions in filtered samples, reported as nitrogen.", "unit": "mg/l"},
         {"id": "NH3N", "name": "Ammonia", "description": "Un-ionized ammonia (NH3), reported as Nitrogen.", "unit": "mg/l"},
@@ -29,7 +28,7 @@ def init_variables(db: Session) -> None:
         {"id": "TPP", "name": "Phosphorus", "description": "Phosphate fractions retained by a filter responding to colorimetric tests after oxidative digestion (including dissolved reactive, acid-hydrolyzable and organic phosphates), reported as phosphorus.", "unit": "mg/l"},
         {"id": "BOD", "name": "Oxygen Demand", "description": "A measure of oxygen consumption during decomposition of both organic and inorganic substances.", "unit": "mg/l"},
         {"id": "COD", "name": "Oxygen Demand", "description": "A measure of oxygen consumption during decomposition of organic and inorganic substances by a chemical oxidant.", "unit": "mg/l"},
-        {"id": "O2-Dis", "name": "Oxygen", "description": "Concentration of molecular oxygen dissolved in water.", "unit": "mg/l"},
+        {"id": "O2_Dis", "name": "Oxygen", "description": "Concentration of molecular oxygen dissolved in water.", "unit": "mg/l"},
         {"id": "PV", "name": "Oxygen Demand", "description": "A measure for the concentration of material in a sample that is readily-oxidisable by potassium permanganate under acidic conditions. Reported as mg O2/L.", "unit": "mg/l"},
         {"id": "TDS", "name": "Dissolved Solids", "description": "Portion of solids that passes through a filter.", "unit": "mg/l"},
         {"id": "TS", "name": "Total Solids", "description": "Material residue left after evaporation of a sample and its subsequent drying at defined temperature.", "unit": "mg/l"},
