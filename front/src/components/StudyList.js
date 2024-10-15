@@ -137,7 +137,14 @@ function StudyList() {
                           </button>
                         </>
                       )}
-                      {/* Mostrar el botón de eliminar solo si el estado no es PENDING o TRAINING */}
+                      {study.status === 'TRAINED' && (
+                        <Link
+                          to={`/studies/results/${study.id}`}
+                          className="btn btn-sm btn-primary me-2"
+                        >
+                          View Results
+                        </Link>
+                      )}
                       {!['PENDING', 'TRAINING'].includes(study.status) && (
                         <button
                           onClick={() => handleDelete(study.id)}

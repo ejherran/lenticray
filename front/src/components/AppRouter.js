@@ -15,6 +15,7 @@ import DatasetEditor from './DatasetEditor';
 import StudyList from './StudyList';
 import StudyCreate from './StudyCreate';
 import StudyEdit from './StudyEdit';
+import StudyResults from './StudyResults';
 
 function AppRouter() {
   return (
@@ -110,6 +111,14 @@ function AppRouter() {
           element={
             <PrivateRoute>
               <StudyEdit />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/studies/results/:id"
+          element={
+            <PrivateRoute>
+              <StudyResults />
             </PrivateRoute>
           }
         />
