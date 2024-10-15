@@ -19,3 +19,4 @@ class Project(Base):
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
 
     user = relationship("User", back_populates="projects")
+    datasets = relationship("Dataset", back_populates="project", cascade="all, delete-orphan")

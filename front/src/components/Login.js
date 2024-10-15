@@ -1,7 +1,7 @@
 // src/components/Login.js
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,12 +11,27 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/users/login`,
+        {
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       localStorage.setItem('token', response.data.access_token);
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed. Please check your credentials.');
+      if (error.response && error.response.data && error.response.data.detail) {
+        alert(`Error: ${error.response.data.detail}`);
+      } else {
+        alert('An error occurred during login.');
+      }
     }
   };
 
@@ -24,7 +39,6 @@ function Login() {
     <div className="container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        {/* Campos del formulario */}
         <div className="mb-3">
           <label>Email:</label>
           <input
@@ -35,14 +49,19 @@ function Login() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        {/* ... */}
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
+        <div className="mb-3">
+          <label>Password:</label>
+          <input
+            type="password"
+            className="form-control"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Login</button>
       </form>
-      <p>
-        Don't have an account? <a href="/register">Register here</a>
-      </p>
+      <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
   );
 }

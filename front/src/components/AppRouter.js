@@ -8,6 +8,9 @@ import Home from './Home';
 import ProjectList from './ProjectList';
 import ProjectCreate from './ProjectCreate';
 import ProjectEdit from './ProjectEdit';
+import DatasetList from './DatasetList';
+import DatasetCreate from './DatasetCreate';
+import DatasetEdit from './DatasetEdit';
 
 function AppRouter() {
   return (
@@ -50,7 +53,30 @@ function AppRouter() {
             </PrivateRoute>
           }
         />
-
+        <Route
+          path="/datasets"
+          element={
+            <PrivateRoute>
+              <DatasetList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/datasets/create"
+          element={
+            <PrivateRoute>
+              <DatasetCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/datasets/edit/:id"
+          element={
+            <PrivateRoute>
+              <DatasetEdit />
+            </PrivateRoute>
+          }
+        />
         {/* Redirigir rutas desconocidas al home o login */}
         <Route
           path="*"
