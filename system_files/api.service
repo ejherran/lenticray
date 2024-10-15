@@ -1,0 +1,12 @@
+[Unit]
+Description=Lenticray API
+After=network.target
+
+[Service]
+User=admin
+Group=admin
+WorkingDirectory=/home/admin/project/lenticray/back
+ExecStart=/home/admin/project/lenticray/.venv/bin/gunicorn -k uvicorn.workers.UvicornWorker app.main:app
+
+[Install]
+WantedBy=multi-user.target

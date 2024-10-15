@@ -20,8 +20,17 @@ pyarrow = "*"
 fastparquet = "*"
 ipython = "*"
 redis = "*"
-pydantic = "*"
 loguru = "*"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+sqlalchemy = "*"
+aiosqlite = "*"
+gunicorn = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+python-multipart = "*"
+pydantic = {extras = ["email"], version = "*"}
+pydantic-settings = "*"
+bcrypt = "*"
 
 [dev-packages]
 
