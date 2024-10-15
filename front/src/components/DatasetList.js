@@ -99,6 +99,12 @@ function DatasetList() {
                   <td>{dataset.rows}</td>
                   <td>
                     <Link
+                      to={`/datasets/editor/${dataset.id}`}
+                      className="btn btn-primary btn-sm me-2"
+                    >
+                      Populate
+                    </Link>
+                    <Link
                       to={`/datasets/edit/${dataset.id}`}
                       className="btn btn-secondary btn-sm me-2"
                     >

@@ -1,5 +1,5 @@
 from .user import User, UserCreate, UserLogin, PasswordChange
 from .project import Project, ProjectCreate, ProjectUpdate
-from .dataset import Dataset, DatasetCreate, DatasetUpdate
+from .dataset import Dataset, DatasetCreate, DatasetUpdate, DatasetPage, DatasetPageUpdate
 from .variable import Variable
 from .token import Token

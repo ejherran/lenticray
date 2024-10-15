@@ -1,7 +1,7 @@
 # app/schemas/dataset.py
 
 from pydantic import BaseModel, UUID4
-from typing import List
+from typing import List, Dict, Any
 from datetime import datetime
 from app.schemas.variable import Variable
 
@@ -22,7 +22,20 @@ class DatasetInDBBase(DatasetBase):
     variables: List[Variable] = []  # List of Variable objects
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Dataset(DatasetInDBBase):
     pass
+
+class DatasetPage(BaseModel):
+    data: List[Dict[str, Any]]
+    page_size: int
+    page_number: int
+    total_rows: int
+    total_pages: int
+
+
+class DatasetPageUpdate(BaseModel):
+    page_size: int
+    page_number: int
+    data: List[Dict[str, Any]]

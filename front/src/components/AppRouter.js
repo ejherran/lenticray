@@ -11,6 +11,7 @@ import ProjectEdit from './ProjectEdit';
 import DatasetList from './DatasetList';
 import DatasetCreate from './DatasetCreate';
 import DatasetEdit from './DatasetEdit';
+import DatasetEditor from './DatasetEditor';
 
 function AppRouter() {
   return (
@@ -74,6 +75,14 @@ function AppRouter() {
           element={
             <PrivateRoute>
               <DatasetEdit />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/datasets/editor/:id"
+          element={
+            <PrivateRoute>
+              <DatasetEditor />
             </PrivateRoute>
           }
         />

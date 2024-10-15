@@ -24,7 +24,7 @@ function Login() {
         }
       );
       localStorage.setItem('token', response.data.access_token);
-      navigate('/home');
+      navigate('/');
     } catch (error) {
       console.error('Login error:', error);
       if (error.response && error.response.data && error.response.data.detail) {
