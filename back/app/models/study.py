@@ -29,3 +29,4 @@ class Study(Base):
 
     project = relationship("Project", back_populates="studies")
     dataset = relationship("Dataset", back_populates="studies")
+    predictions = relationship("Prediction", back_populates="study", cascade="all, delete-orphan")
