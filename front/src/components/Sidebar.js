@@ -7,6 +7,7 @@ function Sidebar() {
     { path: '/', label: 'Home', exact: true },
     { path: '/projects', label: 'Projects' },
     { path: '/datasets', label: 'Datasets' },
+    { path: '/studies', label: 'Studies' },
     // Agrega más elementos del menú aquí si lo deseas
   ];
 

@@ -12,6 +12,9 @@ import DatasetList from './DatasetList';
 import DatasetCreate from './DatasetCreate';
 import DatasetEdit from './DatasetEdit';
 import DatasetEditor from './DatasetEditor';
+import StudyList from './StudyList';
+import StudyCreate from './StudyCreate';
+import StudyEdit from './StudyEdit';
 
 function AppRouter() {
   return (
@@ -83,6 +86,30 @@ function AppRouter() {
           element={
             <PrivateRoute>
               <DatasetEditor />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/studies"
+          element={
+            <PrivateRoute>
+              <StudyList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/studies/create"
+          element={
+            <PrivateRoute>
+              <StudyCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/studies/edit/:id"
+          element={
+            <PrivateRoute>
+              <StudyEdit />
             </PrivateRoute>
           }
         />

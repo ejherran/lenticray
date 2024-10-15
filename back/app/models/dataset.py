@@ -18,3 +18,4 @@ class Dataset(Base):
 
     project = relationship("Project", back_populates="datasets")
     variables = relationship("Variable", secondary=dataset_variable, backref="datasets")
+    studies = relationship("Study", back_populates="dataset", cascade="all, delete-orphan")
