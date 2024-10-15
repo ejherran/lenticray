@@ -18,6 +18,7 @@ import StudyEdit from './StudyEdit';
 import StudyResults from './StudyResults';
 import PredictionList from './PredictionList';
 import PredictionCreate from './PredictionCreate';
+import PredictionResults from './PredictionResults';
 
 function AppRouter() {
   return (
@@ -137,6 +138,14 @@ function AppRouter() {
           element={
             <PrivateRoute>
               <PredictionCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/predictions/results/:id"
+          element={
+            <PrivateRoute>
+              <PredictionResults />
             </PrivateRoute>
           }
         />

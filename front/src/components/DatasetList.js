@@ -77,53 +77,56 @@ function DatasetList() {
           isClearable
         />
       </div>
-      <Link to="/datasets/create" className="btn btn-primary mb-3">
-        Create New Dataset
-      </Link>
       {selectedProject ? (
-        datasets.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Last Modification</th>
-                <th>Rows</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datasets.map((dataset) => (
-                <tr key={dataset.id}>
-                  <td>{dataset.name}</td>
-                  <td>{dataset.date}</td>
-                  <td>{dataset.rows}</td>
-                  <td>
-                    <Link
-                      to={`/datasets/editor/${dataset.id}`}
-                      className="btn btn-primary btn-sm me-2"
-                    >
-                      Populate
-                    </Link>
-                    <Link
-                      to={`/datasets/edit/${dataset.id}`}
-                      className="btn btn-secondary btn-sm me-2"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(dataset.id)}
-                      className="btn btn-danger btn-sm"
-                    >
-                      Delete
-                    </button>
-                  </td>
+        <>
+          <Link to="/datasets/create" className="btn btn-primary mb-3">
+            Create New Dataset
+          </Link>
+
+          {datasets.length > 0 ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Last Modification</th>
+                  <th>Rows</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div>No datasets found for this project.</div>
-        )
+              </thead>
+              <tbody>
+                {datasets.map((dataset) => (
+                  <tr key={dataset.id}>
+                    <td>{dataset.name}</td>
+                    <td>{dataset.date}</td>
+                    <td>{dataset.rows}</td>
+                    <td>
+                      <Link
+                        to={`/datasets/editor/${dataset.id}`}
+                        className="btn btn-primary btn-sm me-2"
+                      >
+                        Populate
+                      </Link>
+                      <Link
+                        to={`/datasets/edit/${dataset.id}`}
+                        className="btn btn-secondary btn-sm me-2"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(dataset.id)}
+                        className="btn btn-danger btn-sm"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div>No datasets found for this project.</div>
+          )}
+        </>
       ) : (
         <div>Please select a project to view its datasets.</div>
       )}
