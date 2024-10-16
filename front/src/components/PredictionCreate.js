@@ -8,8 +8,8 @@ function PredictionCreate() {
   const [studyId, setStudyId] = useState('');
   const [study, setStudy] = useState(null);
   const [name, setName] = useState('');
-  const [windowSize, setWindowSize] = useState(1);
-  const [amount, setAmount] = useState(1);
+  const [windowSize, setWindowSize] = useState(12);
+  const [amount, setAmount] = useState(12);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

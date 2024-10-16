@@ -77,4 +77,5 @@ def execute(
             process_task(redis_cli, base_path, task_def)
         except Exception as e:
             redis_cli.set(task_def['id'], 'FAILED')
-            logger.error(f'Error processing task: {task}, {e}')
+            logger.error(f'Error processing task: {task_def["id"]}')
+            logger.exception(e)

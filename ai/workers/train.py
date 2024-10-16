@@ -173,7 +173,6 @@ def run_fuzzy(
 ) -> tuple[pd.DataFrame, list[str]]:
     logger.info("6. Running fuzzy engine...")
 
-    logger.info("6. Ejecución del motor de inferencia difusa...")
     fuz_data_serie, _, _ = engine.ejecutar_motor(df)
 
     fuz_vars = ['eutrofizacion', 'quimicas', 'fisicas', 'adicionales']
@@ -184,26 +183,34 @@ def run_fuzzy(
         'adicionales': []
     }
 
-    fuz_tags = {
-        'eutrofizacion': [],
-        'quimicas': [],
-        'fisicas': [],
-        'adicionales': []
-    }
-
     for i in fuz_data_serie:
         for c in fuz_vars:
             fuz_data[c].append(i[c]['valor'])
-            fuz_tags[c].append(i[c]['etiqueta'])
 
     fuz_data = pd.DataFrame(fuz_data)
+
+    non_null_columns = fuz_data.columns[fuz_data.notna().any()].tolist()
+    fuz_features = [col for col in fuz_vars if col in non_null_columns]
+
+    fuz_data = fuz_data[fuz_features]
+
+    fuz_tags = {
+        feature: [] for feature in fuz_features
+    }
+
+    for i in fuz_data_serie:
+        for c in fuz_features:
+            fuz_tags[c].append(i[c]['etiqueta'])
+
     fuz_tags = pd.DataFrame(fuz_tags)
+    
     fuz_data.info()
+    fuz_tags.info()
 
     fuz_data.to_parquet(f'{config.base_path}/{config.work_dir}/fuzzy.parquet')
     fuz_tags.to_parquet(f'{config.base_path}/{config.work_dir}/fuzzy_tags.parquet')
 
-    return fuz_data, fuz_vars
+    return fuz_data, fuz_features
 
 
 def train_model(

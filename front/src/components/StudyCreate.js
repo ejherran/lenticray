@@ -9,8 +9,8 @@ function StudyCreate() {
   const [datasets, setDatasets] = useState([]);
   const [selectedDataset, setSelectedDataset] = useState(null);
   const [name, setName] = useState('');
-  const [timeSpace, setTimeSpace] = useState('daily');
-  const [windowSize, setWindowSize] = useState(1);
+  const [timeSpace, setTimeSpace] = useState('MONTHLY');
+  const [windowSize, setWindowSize] = useState(12);
   const navigate = useNavigate();
 
   // Obtener la lista de proyectos al montar el componente
