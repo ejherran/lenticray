@@ -163,7 +163,7 @@ cython_debug/
 
 # Binary datasets
 *.parquet
-!research/*.parquet
+!research/datasets/*.parquet
 !demo/*.parquet
 
 # Model files
