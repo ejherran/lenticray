@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     REDIS_HOST: str = "localhost"
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
-    REDIS_PASSWORD: Optional[str] = None  # Si tienes contraseña, colócala aquí
+    REDIS_PASSWORD: Optional[str] = None
 
     class Config:
         case_sensitive = True
