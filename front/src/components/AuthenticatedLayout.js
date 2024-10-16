@@ -1,7 +1,6 @@
 // src/components/AuthenticatedLayout.js
 import React from 'react';
 import Sidebar from './Sidebar';
-import './styles.css';
 
 function AuthenticatedLayout({ children }) {
   return (

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DataGrid from 'react-data-grid';
 import { textEditor } from 'react-data-grid';
-import 'react-data-grid/lib/styles.css';
 import api from '../api/api';
 import NumericEditor from './NumericEditor';
 import DateEditor from './DateEditor';
