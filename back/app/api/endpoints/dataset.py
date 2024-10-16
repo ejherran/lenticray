@@ -411,12 +411,14 @@ def download_dataset_csv(
     df.to_csv(csv_buffer, index=False)
     csv_buffer.seek(0)
 
+    fix_name = dataset.name.replace(" ", "_").lower()
+
     # Crear la respuesta StreamingResponse
     response = StreamingResponse(
         iter([csv_buffer.getvalue()]),
         media_type="text/csv",
     )
-    response.headers["Content-Disposition"] = f"attachment; filename={dataset.name}.csv"
+    response.headers["Content-Disposition"] = f"attachment; filename={fix_name}.csv"
     response.headers["Access-Control-Expose-Headers"] = "Content-Disposition"
 
     return response

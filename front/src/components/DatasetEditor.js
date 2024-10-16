@@ -311,9 +311,6 @@ function DatasetEditor() {
 
   const uploadCSV = async (file) => {
     try {
-      // Mostrar mensaje de carga
-      alert('Uploading CSV file. Please wait...');
-
       // Crear FormData y agregar el archivo
       const formData = new FormData();
       formData.append('file', file);
