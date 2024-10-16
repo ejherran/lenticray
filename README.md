@@ -6,10 +6,6 @@ Lenticray is an advanced analysis and prediction system for algae proliferation 
 
 - [Project Structure](#project-structure)
 - [System Requirements](#system-requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Project Structure
 
