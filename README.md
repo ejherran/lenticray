@@ -20,6 +20,7 @@ The Lenticray system is organized into three main packages:
 - **`ia/`**: This package implements the logic for analyzing datasets using fuzzy logic and training neural network models for time series predictions. It serves as the core analytical engine of the system.
 - **`back/`**: This package serves as the API server using FastAPI. It handles API requests, manages user authentication, dataset management, and orchestrates communication between the analytical engine (`ia`) and the frontend.
 - **`front/`**: This package is the user interface of the system, providing an intuitive way to interact with the platform. It allows users to define projects, upload datasets, configure studies, and visualize results and predictions.
+- **research/**: This directory contains the notebooks, datasets and inference plots used in the research base to create this platform.  For academic interest only. 
 
 ## System Requirements
 
