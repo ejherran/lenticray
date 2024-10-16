@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState('');
@@ -38,31 +39,36 @@ function ChangePassword() {
   };
 
   return (
-    <div className="container">
-      <h2>Change Password</h2>
-      <form onSubmit={handleChangePassword}>
-        <div className="mb-3">
-          <label>Old Password:</label>
-          <input
-            type="password"
-            className="form-control"
-            required
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label>New Password:</label>
-          <input
-            type="password"
-            className="form-control"
-            required
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">Change Password</button>
-      </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
+        <form onSubmit={handleChangePassword}>
+          <div className="mb-3">
+            <label htmlFor="oldPassword" className="form-label">Old Password:</label>
+            <input
+              type="password"
+              className="form-control"
+              id="oldPassword"
+              required
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              placeholder="Enter your old password"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="newPassword" className="form-label">New Password:</label>
+            <input
+              type="password"
+              className="form-control"
+              id="newPassword"
+              required
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter your new password"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100">Change Password</button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -8,7 +8,6 @@ function Sidebar() {
     { path: '/projects', label: 'Projects' },
     { path: '/datasets', label: 'Datasets' },
     { path: '/studies', label: 'Studies' },
-    // Agrega más elementos del menú aquí si lo deseas
   ];
 
   return (
@@ -29,6 +28,16 @@ function Sidebar() {
             </NavLink>
           </li>
         ))}
+        <li>
+          <button
+            className="btn btn-link text-decoration-none p-2 d-block"
+            onClick={() => {
+              window.location.href = '/change-password';
+            }}
+          >
+            Change Password
+          </button>
+        </li>
         <li>
           <button
             className="btn btn-link text-decoration-none p-2 d-block"
