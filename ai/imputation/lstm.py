@@ -49,6 +49,7 @@ def _train_model(model, knn_data, features, window_size):
         patience=10,                      # Número de épocas sin mejora antes de detener
         verbose=0,                        # Nivel de verbosidad
         mode='min',                       # Minimizar val_loss
+        min_delta=0.0001,                 # Mínimo cambio permitido en la métrica
         restore_best_weights=True         # Restaurar los mejores pesos al finalizar
     )
 

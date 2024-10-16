@@ -1,0 +1,41 @@
+/* src/components/styles.css */
+
+/* Estilos para el layout */
+.d-flex {
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    min-height: 100vh;
+    position: fixed;
+}
+
+.content {
+    margin-left: 200px;
+    padding: 20px;
+}
+
+/* Estilos para el sidebar */
+.sidebar ul {
+    padding-left: 0;
+}
+
+.sidebar li a {
+    color: black;
+}
+
+.sidebar li a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.sidebar li a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Estilos adicionales */
+body {
+    margin: 0;
+}

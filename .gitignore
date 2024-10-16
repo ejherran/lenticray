@@ -163,3 +163,14 @@ cython_debug/
 
 # Binary datasets
 *.parquet
+
+# Model files
+*.keras
+
+# SQLite database files
+*.db
+
+# Frontend
+node_modules/
+build/
+dist/
