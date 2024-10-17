@@ -39,4 +39,4 @@ class StudyInDBBase(StudyBase):
         from_attributes = True
 
 class Study(StudyInDBBase):
-    pass
+    dataset_name: str = "Unknown"
