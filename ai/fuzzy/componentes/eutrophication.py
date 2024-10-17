@@ -70,6 +70,7 @@ class NivelEutrofizacion:
             self.condiciones_adicionales_var['DESFAVORABLES'] = fuzz.trapmf(self.condiciones_adicionales_var.universe, [0, 0, 0.2, 0.4])
             self.condiciones_adicionales_var['NEUTRALES'] = fuzz.trimf(self.condiciones_adicionales_var.universe, [0.3, 0.5, 0.7])
             self.condiciones_adicionales_var['FAVORABLES'] = fuzz.trapmf(self.condiciones_adicionales_var.universe, [0.6, 0.8, 1, 1])
+            self.variables['condiciones_adicionales'] = self.condiciones_adicionales_var
 
 
         # Definir las reglas difusas según las variables disponibles

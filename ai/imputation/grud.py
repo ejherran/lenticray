@@ -97,7 +97,10 @@ def _prepare_data(data_serie):
 
     tmp_data.sort_values('Date', inplace=True)
     tmp_data.set_index('Date', inplace=True)
-    tmp_data.drop(['Year', 'Month'], axis=1, inplace=True)
+
+    columns_need_drop = [col for col in ['Year', 'Month', 'Day', 'Week'] if col in tmp_data.columns]
+
+    tmp_data.drop(columns_need_drop, axis=1, inplace=True)
 
     # 2. Normalización de los Datos
     scaler = MinMaxScaler()

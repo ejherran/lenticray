@@ -100,6 +100,8 @@ def read_studies(
             if new_status != study.status:
                 study.status = new_status
                 studies_updated = True
+        
+        study.dataset_name = crud.dataset.get(db=db, id=study.dataset_id).name
 
     if studies_updated:
         db.commit()  # Confirmar los cambios en la base de datos
