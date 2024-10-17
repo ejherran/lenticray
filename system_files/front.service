@@ -1,0 +1,12 @@
+[Unit]
+Description=Lenticray Frontend
+After=network.target
+
+[Service]
+User=admin
+Group=admin
+WorkingDirectory=/home/admin/project/lenticray/front
+ExecStart=/usr/bin/serve -s build -l 3000
+
+[Install]
+WantedBy=multi-user.target
