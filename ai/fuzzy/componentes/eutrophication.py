@@ -83,24 +83,190 @@ class NivelEutrofizacion:
     def _definir_reglas(self):
         # Reglas basadas en las variables disponibles
         if 'condiciones_quimicas' in self.variables and 'condiciones_fisicas' in self.variables and 'condiciones_adicionales' in self.variables:
-            # Ambas variables están disponibles
+            # Todas las variables están disponibles
             quimicas = self.variables['condiciones_quimicas']
             fisicas = self.variables['condiciones_fisicas']
             adicionales = self.variables['condiciones_adicionales']
 
-            self.rules.append(ctrl.Rule(quimicas['BUENAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES'] | fisicas['MALAS']), self.nivel_eutrofizacion_var['OLIGOTRÓFICO']))
-            self.rules.append(ctrl.Rule(quimicas['BUENAS'] & fisicas['MUY MALAS'], self.nivel_eutrofizacion_var['MESOTRÓFICO']))
+            # Regla 1a
+            self.rules.append(ctrl.Rule(
+                quimicas['BUENAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES'] | fisicas['MALAS']) & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
 
-            self.rules.append(ctrl.Rule(quimicas['NEUTRALES'] & fisicas['BUENAS'], self.nivel_eutrofizacion_var['OLIGOTRÓFICO']))
-            self.rules.append(ctrl.Rule(quimicas['NEUTRALES'] & (fisicas['NEUTRALES']), self.nivel_eutrofizacion_var['MESOTRÓFICO']))
-            self.rules.append(ctrl.Rule(quimicas['NEUTRALES'] & (fisicas['MALAS'] | fisicas['MUY MALAS']), self.nivel_eutrofizacion_var['EUTRÓFICO']))
+            # Regla 1b
+            self.rules.append(ctrl.Rule(
+                quimicas['BUENAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES'] | fisicas['MALAS']) & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
 
-            self.rules.append(ctrl.Rule(quimicas['MALAS'] & fisicas['BUENAS'], self.nivel_eutrofizacion_var['MESOTRÓFICO']))
-            self.rules.append(ctrl.Rule(quimicas['MALAS'] & (fisicas['NEUTRALES'] | fisicas['MALAS']), self.nivel_eutrofizacion_var['EUTRÓFICO']))
-            self.rules.append(ctrl.Rule(quimicas['MALAS'] & fisicas['MUY MALAS'], self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']))
+            # Regla 1c
+            self.rules.append(ctrl.Rule(
+                quimicas['BUENAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES'] | fisicas['MALAS']) & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
 
-            self.rules.append(ctrl.Rule(quimicas['MUY MALAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES']), self.nivel_eutrofizacion_var['EUTRÓFICO']))
-            self.rules.append(ctrl.Rule(quimicas['MUY MALAS'] & (fisicas['MALAS'] | fisicas['MUY MALAS']), self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']))
+            # Regla 2a
+            self.rules.append(ctrl.Rule(
+                quimicas['BUENAS'] & fisicas['MUY MALAS'] & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
+
+            # Regla 2b
+            self.rules.append(ctrl.Rule(
+                quimicas['BUENAS'] & fisicas['MUY MALAS'] & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 2c
+            self.rules.append(ctrl.Rule(
+                quimicas['BUENAS'] & fisicas['MUY MALAS'] & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 3a
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & fisicas['BUENAS'] & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
+
+            # Regla 3b
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & fisicas['BUENAS'] & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
+
+            # Regla 3c
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & fisicas['BUENAS'] & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 4a
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & fisicas['NEUTRALES'] & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
+
+            # Regla 4b
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & fisicas['NEUTRALES'] & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 4c
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & fisicas['NEUTRALES'] & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 5a
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & (fisicas['MALAS'] | fisicas['MUY MALAS']) & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 5b
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & (fisicas['MALAS'] | fisicas['MUY MALAS']) & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 5c
+            self.rules.append(ctrl.Rule(
+                quimicas['NEUTRALES'] & (fisicas['MALAS'] | fisicas['MUY MALAS']) & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
+
+            # Regla 6a
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & fisicas['BUENAS'] & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['OLIGOTRÓFICO']
+            ))
+
+            # Regla 6b
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & fisicas['BUENAS'] & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 6c
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & fisicas['BUENAS'] & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 7a
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & (fisicas['NEUTRALES'] | fisicas['MALAS']) & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 7b
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & (fisicas['NEUTRALES'] | fisicas['MALAS']) & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 7c
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & (fisicas['NEUTRALES'] | fisicas['MALAS']) & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
+
+            # Regla 8a
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & fisicas['MUY MALAS'] & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 8b
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & fisicas['MUY MALAS'] & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
+
+            # Regla 8c
+            self.rules.append(ctrl.Rule(
+                quimicas['MALAS'] & fisicas['MUY MALAS'] & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
+
+            # Regla 9a
+            self.rules.append(ctrl.Rule(
+                quimicas['MUY MALAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES']) & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['MESOTRÓFICO']
+            ))
+
+            # Regla 9b
+            self.rules.append(ctrl.Rule(
+                quimicas['MUY MALAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES']) & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 9c
+            self.rules.append(ctrl.Rule(
+                quimicas['MUY MALAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES']) & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
+
+            # Regla 10a
+            self.rules.append(ctrl.Rule(
+                quimicas['MUY MALAS'] & (fisicas['MALAS'] | fisicas['MUY MALAS']) & adicionales['DESFAVORABLES'],
+                self.nivel_eutrofizacion_var['EUTRÓFICO']
+            ))
+
+            # Regla 10b
+            self.rules.append(ctrl.Rule(
+                quimicas['MUY MALAS'] & (fisicas['MALAS'] | fisicas['MUY MALAS']) & adicionales['NEUTRALES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
+
+            # Regla 10c
+            self.rules.append(ctrl.Rule(
+                quimicas['MUY MALAS'] & (fisicas['MALAS'] | fisicas['MUY MALAS']) & adicionales['FAVORABLES'],
+                self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']
+            ))
 
         elif 'condiciones_quimicas' in self.variables and 'condiciones_fisicas' in self.variables:
             # Ambas variables están disponibles
@@ -120,6 +286,7 @@ class NivelEutrofizacion:
 
             self.rules.append(ctrl.Rule(quimicas['MUY MALAS'] & (fisicas['BUENAS'] | fisicas['NEUTRALES']), self.nivel_eutrofizacion_var['EUTRÓFICO']))
             self.rules.append(ctrl.Rule(quimicas['MUY MALAS'] & (fisicas['MALAS'] | fisicas['MUY MALAS']), self.nivel_eutrofizacion_var['HIPEREUTRÓFICO']))
+        
         elif 'condiciones_quimicas' in self.variables:
             # Solo condiciones químicas están disponibles
             quimicas = self.variables['condiciones_quimicas']
