@@ -1,8 +1,3 @@
-import os
-
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' 
-
 import redis
 import time
 import json
@@ -10,18 +5,6 @@ import tensorflow as tf
 import torch
 import numpy as np
 import random
-
-seed = 42
-tf.random.set_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-
-torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
-
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
 
 from loguru import logger
 
@@ -56,9 +39,20 @@ def execute(
     *,
     redis_cli,
     queue_name,
-    base_path
+    base_path,
+    seed,
 ) -> None:
-    
+    tf.random.set_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.manual_seed(seed)
+
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
     while True:
         try:
             _, task = redis_cli.blpop(queue_name)

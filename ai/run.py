@@ -1,3 +1,8 @@
+import os
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' 
+
 import redis
 
 from loguru import logger
@@ -19,6 +24,7 @@ def main():
         redis_cli=redis_client,
         queue_name=settings.QUEUE_NAME,
         base_path=settings.BASE_PATH,
+        seed=settings.SEED,
     )
 
 if __name__ == '__main__':
