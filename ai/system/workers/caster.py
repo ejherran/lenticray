@@ -25,8 +25,8 @@ torch.backends.cudnn.benchmark = False
 
 from loguru import logger
 
-from ai.commons import enums, dto
-from ai.workers import train, predict
+from system.commons import enums, dto
+from system.workers import train, predict
 
 def process_task(redis_cli, base_path, task):
     logger.info(f'Processing task: {task["id"]}')

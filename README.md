@@ -86,7 +86,7 @@ pipenv sync         # Install all Python dependencies
 Navigate to the frontend directory and install the required Node.js packages:
 
 ```bash
-cd ../front
+cd front/
 npm ci              # Install all Node.js dependencies with a clean install
 ```
 
@@ -95,7 +95,7 @@ npm ci              # Install all Node.js dependencies with a clean install
 Navigate to the backend directory and start the FastAPI server:
 
 ```bash
-cd ../back
+cd back/
 cp .env_template .env  # Copy the environment template file and update it with the necessary configurations
 uvicorn main:app --reload  # Start the backend server in development mode
 ```
@@ -105,7 +105,7 @@ uvicorn main:app --reload  # Start the backend server in development mode
 Navigate to the frontend directory and start the React development server:
 
 ```bash
-cd ../front
+cd front/
 cp .env_template .env  # Copy the environment template file and update it with the necessary configurations
 HOST=localhost PORT=3000 npm run start  # Start the frontend server
 ```
@@ -113,7 +113,9 @@ HOST=localhost PORT=3000 npm run start  # Start the frontend server
 ### 7. Start IA Service
 
 ```bash
-python run_ai.py
+cd ai/
+cp .env_template .env  # Copy the environment template file and update it with the necessary configurations
+python run.py
 ```
 
 NOTE: The IA service is a standalone service that can be run independently from the backend and frontend. It is responsible for training neural networks and performing fuzzy logic analysis.
@@ -123,10 +125,10 @@ This service use the redis server to comunicate with the backend and manage the 
 You can run the IA service in background using the following command:
 
 ```bash
-nohup python run_ai.py &
+nohup python run.py &
 ```
 
-or you can use the `supervisord` a tool like `tmux` to run the service and detach the terminal.
+or you can use tool like `tmux` to run the service and detach the terminal.
 
 ### 8. Access the System
 

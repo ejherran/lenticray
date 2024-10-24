@@ -2,11 +2,11 @@ import pandas as pd
 
 from loguru import logger
 
-from ai.commons import enums, dto
-from ai.tools import spacer
-from ai.imputation import dual
-from ai.prediction import lstm
-from ai.fuzzy import engine
+from system.commons import enums, dto
+from system.tools import spacer
+from system.imputation import dual
+from system.prediction import lstm
+from system.fuzzy import engine
 
 _BASE_COLUMNS = [
     "Chl_a",

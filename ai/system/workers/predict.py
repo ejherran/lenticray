@@ -3,9 +3,9 @@ import numpy as np
 
 from loguru import logger
 
-from ai.commons import enums, dto
-from ai.prediction import lstm
-from ai.fuzzy.componentes import eutrophication, chemical, physical, aditional
+from system.commons import enums, dto
+from system.prediction import lstm
+from system.fuzzy.componentes import eutrophication, chemical, physical, aditional
 
 def execute(
     *,

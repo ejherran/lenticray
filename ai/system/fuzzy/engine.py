@@ -1,16 +1,16 @@
 import numpy as np
 import pandas as pd
 
-from ai.fuzzy.componentes.nitrogen import NitrogenLevel
-from ai.fuzzy.componentes.physical import PhysicalConditions
-from ai.fuzzy.componentes.nutrients import NutrientLevel
-from ai.fuzzy.componentes.aditional import AdditionalConditions
-from ai.fuzzy.componentes.chemical import ChemicalConditions
-from ai.fuzzy.componentes.eutrophication import EutrophicationLevel
-from ai.fuzzy.componentes.oxygen import OxygenBalance
-from ai.fuzzy.componentes.solids import SolidsLevel
-from ai.fuzzy.componentes.visibility import VisibilityLevel
-from ai.fuzzy.componentes.phosphorus import PhosphorusLevel
+from system.fuzzy.componentes.nitrogen import NitrogenLevel
+from system.fuzzy.componentes.physical import PhysicalConditions
+from system.fuzzy.componentes.nutrients import NutrientLevel
+from system.fuzzy.componentes.aditional import AdditionalConditions
+from system.fuzzy.componentes.chemical import ChemicalConditions
+from system.fuzzy.componentes.eutrophication import EutrophicationLevel
+from system.fuzzy.componentes.oxygen import OxygenBalance
+from system.fuzzy.componentes.solids import SolidsLevel
+from system.fuzzy.componentes.visibility import VisibilityLevel
+from system.fuzzy.componentes.phosphorus import PhosphorusLevel
 
 class FuzzyEngine:
     def __init__(self, **kwargs) -> None:
