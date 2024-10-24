@@ -2,7 +2,7 @@ import pandas as pd
 
 from dateutil.relativedelta import relativedelta
 
-from ai.commons import enums
+from system.commons import enums
 
 
 def process_data_in_temporal_space(dataset, temporal_space):

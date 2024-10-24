@@ -236,8 +236,7 @@ def download_prediction_results(
         raise HTTPException(status_code=400, detail="La predicción aún no ha sido completada")
 
     # Definir los posibles nombres de columnas
-    spanish_columns = ["eutrofizacion", "químicas", "físicas", "adicionales"]
-    english_columns = ["eutrophication", "chemical", "physical", "additional"]
+    columns = ["eutrophication_level", "chemical_conditions", "physical_conditions", "additional_conditions"]
 
     # Construir las rutas a los archivos
     user_data_dir = os.path.join(settings.USER_DATA, str(current_user.id))
@@ -258,37 +257,27 @@ def download_prediction_results(
         raise HTTPException(status_code=500, detail="Error al leer los archivos de resultados")
 
     # Seleccionar las columnas disponibles
-    available_columns = [col for col in spanish_columns if col in df_prediction.columns]
+    available_columns = [col for col in columns if col in df_prediction.columns]
     if not available_columns:
         raise HTTPException(status_code=400, detail="No hay columnas disponibles en los resultados")
 
-    # Renombrar las columnas al inglés
-    column_mapping = {spanish: english for spanish, english in zip(spanish_columns, english_columns)}
-    df_prediction.rename(columns=column_mapping, inplace=True)
-    df_prediction_tags.rename(columns=column_mapping, inplace=True)
-
-    # Añadir la columna adicional 'eutrofizacion_inferida' al dataframe de tags
-    df_prediction_tags.rename(columns={'eutrofizacion_inferida': 'eutrophication_inferred'}, inplace=True)
-
-    # Crear columnas de tags y agregar 'eutrophication_inferred'
+    # Crear columnas de tags y agregar 'inferred_eutrophication_level_tag'
     for col in available_columns:
-        english_col = column_mapping[col]
-        if english_col in df_prediction_tags.columns:
-            df_prediction[english_col + "_tag"] = df_prediction_tags[english_col]
-    # Añadir 'eutrophication_inferred' si existe
-    if 'eutrophication_inferred' in df_prediction_tags.columns:
-        df_prediction['eutrophication_inferred'] = df_prediction_tags['eutrophication_inferred']
+        if col in df_prediction_tags.columns:
+            df_prediction[col + "_tag"] = df_prediction_tags[col]
+    # Añadir 'inferred_eutrophication_level_tag' si existe
+    if 'inferred_eutrophication_level_tag' in df_prediction_tags.columns:
+        df_prediction['inferred_eutrophication_level_tag'] = df_prediction_tags['inferred_eutrophication_level_tag']
 
     # Unificar las columnas disponibles
     result_columns = []
     for col in available_columns:
-        english_col = column_mapping[col]
-        result_columns.append(english_col)
-        if english_col + "_tag" in df_prediction.columns:
-            result_columns.append(english_col + "_tag")
-    # Añadir 'eutrophication_inferred' al final si existe
-    if 'eutrophication_inferred' in df_prediction.columns:
-        result_columns.append('eutrophication_inferred')
+        result_columns.append(col)
+        if col + "_tag" in df_prediction.columns:
+            result_columns.append(col + "_tag")
+    # Añadir 'inferred_eutrophication_level_tag' al final si existe
+    if 'inferred_eutrophication_level_tag' in df_prediction.columns:
+        result_columns.append('inferred_eutrophication_level_tag')
 
     # Seleccionar las columnas finales
     df_result = df_prediction[result_columns]
@@ -304,7 +293,6 @@ def download_prediction_results(
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=prediction_{prediction.id}_results.csv"}
     )
-
 
 @router.get("/{prediction_id}/results", response_class=JSONResponse)
 def get_prediction_results(
@@ -332,8 +320,7 @@ def get_prediction_results(
         raise HTTPException(status_code=400, detail="La predicción aún no ha sido completada")
 
     # Definir los posibles nombres de columnas
-    spanish_columns = ["eutrofizacion", "quimicas", "fisicas", "adicionales"]
-    english_columns = ["eutrophication", "chemical", "physical", "additional"]
+    columns = ["eutrophication_level", "chemical_conditions", "physical_conditions", "additional_conditions"]
 
     # Construir las rutas a los archivos
     user_data_dir = os.path.join(settings.USER_DATA, str(current_user.id))
@@ -354,37 +341,27 @@ def get_prediction_results(
         raise HTTPException(status_code=500, detail="Error al leer los archivos de resultados")
 
     # Seleccionar las columnas disponibles
-    available_columns = [col for col in spanish_columns if col in df_prediction.columns]
+    available_columns = [col for col in columns if col in df_prediction.columns]
     if not available_columns:
         raise HTTPException(status_code=400, detail="No hay columnas disponibles en los resultados")
 
-    # Renombrar las columnas al inglés
-    column_mapping = {spanish: english for spanish, english in zip(spanish_columns, english_columns)}
-    df_prediction.rename(columns=column_mapping, inplace=True)
-    df_prediction_tags.rename(columns=column_mapping, inplace=True)
-
-    # Añadir la columna adicional 'eutrofizacion_inferida' al dataframe de tags
-    df_prediction_tags.rename(columns={'eutrofizacion_inferida': 'eutrophication_inferred'}, inplace=True)
-
-    # Crear columnas de tags y agregar 'eutrophication_inferred'
+    # Crear columnas de tags y agregar 'inferred_eutrophication_level_tag'
     for col in available_columns:
-        english_col = column_mapping[col]
-        if english_col in df_prediction_tags.columns:
-            df_prediction[english_col + "_tag"] = df_prediction_tags[english_col]
-    # Añadir 'eutrophication_inferred' si existe
-    if 'eutrophication_inferred' in df_prediction_tags.columns:
-        df_prediction['eutrophication_inferred'] = df_prediction_tags['eutrophication_inferred']
+        if col in df_prediction_tags.columns:
+            df_prediction[col + "_tag"] = df_prediction_tags[col]
+    # Añadir 'inferred_eutrophication_level_tag' si existe
+    if 'inferred_eutrophication_level_tag' in df_prediction_tags.columns:
+        df_prediction['inferred_eutrophication_level_tag'] = df_prediction_tags['inferred_eutrophication_level_tag']
 
     # Unificar las columnas disponibles
     result_columns = []
     for col in available_columns:
-        english_col = column_mapping[col]
-        result_columns.append(english_col)
-        if english_col + "_tag" in df_prediction.columns:
-            result_columns.append(english_col + "_tag")
-    # Añadir 'eutrophication_inferred' al final si existe
-    if 'eutrophication_inferred' in df_prediction.columns:
-        result_columns.append('eutrophication_inferred')
+        result_columns.append(col)
+        if col + "_tag" in df_prediction.columns:
+            result_columns.append(col + "_tag")
+    # Añadir 'inferred_eutrophication_level_tag' al final si existe
+    if 'inferred_eutrophication_level_tag' in df_prediction.columns:
+        result_columns.append('inferred_eutrophication_level_tag')
 
     # Seleccionar las columnas finales
     df_result = df_prediction[result_columns]

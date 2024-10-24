@@ -26,7 +26,7 @@ def _prepare_data(data_serie, features):
 
 
 def _create_model(window_size, num_features):
-    # Construcción del modelo con capa Input explícita
+    # Construcción del model con capa Input explícita
     model = Sequential()
     model.add(Input(shape=(window_size, num_features)))  # Capa de entrada
     model.add(LSTM(512))         # Capa LSTM sin input_shape

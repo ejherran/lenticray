@@ -19,6 +19,11 @@ function StudyResults() {
     const [results, setResults] = useState([]);
     const [availableColumns, setAvailableColumns] = useState([]);
 
+    const createTitle = (col) => {
+        const title_parts = col.split('_');
+        return title_parts.map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    }
+
     useEffect(() => {
         fetchStudy();
         fetchResults();
@@ -98,7 +103,7 @@ function StudyResults() {
             <div>
                 {availableColumns.map((col) => (
                     <div key={col} className="mb-5">
-                        <h4>{col.charAt(0).toUpperCase() + col.slice(1)}</h4>
+                        <h4>{createTitle(col)}</h4>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={results}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -107,11 +112,17 @@ function StudyResults() {
                                 <Tooltip
                                     formatter={(value, name, props) => {
                                         const tag = props.payload[`${col}_tag`];
-                                        return [`Value: ${value}`, `Tag: ${tag}`];
+                                        return [`Value: ${parseFloat(value).toFixed(4)}`, `Tag: ${tag}`];
                                     }}
                                 />
                                 <Legend />
-                                <Line type="monotone" dataKey={col} stroke="#8884d8" activeDot={{ r: 8 }} />
+                                <Line 
+                                    type="monotone"
+                                    dataKey={col}
+                                    name={createTitle(col)}
+                                    stroke="#8884d8"
+                                    activeDot={{ r: 8 }} 
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>

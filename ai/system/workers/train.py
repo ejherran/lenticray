@@ -2,11 +2,11 @@ import pandas as pd
 
 from loguru import logger
 
-from ai.commons import enums, dto
-from ai.tools import spacer
-from ai.imputation import dual
-from ai.prediction import lstm
-from ai.fuzzy import engine
+from system.commons import enums, dto
+from system.tools import spacer
+from system.imputation import dual
+from system.prediction import lstm
+from system.fuzzy import engine
 
 _BASE_COLUMNS = [
     "Chl_a",
@@ -173,19 +173,19 @@ def run_fuzzy(
 ) -> tuple[pd.DataFrame, list[str]]:
     logger.info("6. Running fuzzy engine...")
 
-    fuz_data_serie, _, _ = engine.ejecutar_motor(df)
+    fuz_data_serie, _, _ = engine.execute_engine(df)
 
-    fuz_vars = ['eutrofizacion', 'quimicas', 'fisicas', 'adicionales']
+    fuz_vars = ['eutrophication_level', 'chemical_conditions', 'physical_conditions', 'additional_conditions']
     fuz_data = {
-        'eutrofizacion': [],
-        'quimicas': [],
-        'fisicas': [],
-        'adicionales': []
+        'eutrophication_level': [],
+        'chemical_conditions': [],
+        'physical_conditions': [],
+        'additional_conditions': []
     }
 
     for i in fuz_data_serie:
         for c in fuz_vars:
-            fuz_data[c].append(i[c]['valor'])
+            fuz_data[c].append(i[c]['value'])
 
     fuz_data = pd.DataFrame(fuz_data)
 
@@ -200,12 +200,11 @@ def run_fuzzy(
 
     for i in fuz_data_serie:
         for c in fuz_features:
-            fuz_tags[c].append(i[c]['etiqueta'])
+            fuz_tags[c].append(i[c]['label'])
 
     fuz_tags = pd.DataFrame(fuz_tags)
     
     fuz_data.info()
-    fuz_tags.info()
 
     fuz_data.to_parquet(f'{config.base_path}/{config.work_dir}/fuzzy.parquet')
     fuz_tags.to_parquet(f'{config.base_path}/{config.work_dir}/fuzzy_tags.parquet')

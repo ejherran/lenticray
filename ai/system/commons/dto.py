@@ -1,6 +1,6 @@
 import pydantic
 
-from ai.commons import enums
+from system.commons import enums
 
 class Settings(pydantic.BaseModel):
     id: str
