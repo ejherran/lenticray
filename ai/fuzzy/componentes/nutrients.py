@@ -2,174 +2,174 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
-class NivelNutrientes:
-    def __init__(self, nivel_nitrogeno=np.nan, nivel_fosforo=np.nan):
-        self.nivel_nitrogeno = nivel_nitrogeno
-        self.nivel_fosforo = nivel_fosforo
-        self.nivel_nutrientes = np.nan
+class NutrientLevel:
+    def __init__(self, nitrogen_level=np.nan, phosphorus_level=np.nan):
+        self.nitrogen_level = nitrogen_level
+        self.phosphorus_level = phosphorus_level
+        self.nutrient_level = np.nan
 
         # Verificar que al menos una variable esté disponible
-        if np.isnan(self.nivel_nitrogeno) and np.isnan(self.nivel_fosforo):
-            raise ValueError("Se requiere al menos nivel_nitrogeno o nivel_fosforo para evaluar el nivel de nutrientes.")
+        if np.isnan(self.nitrogen_level) and np.isnan(self.phosphorus_level):
+            raise ValueError("Se requiere al menos nitrogen_level o phosphorus_level para evaluar el nivel de nutrient_level.")
 
-        # Determinar variables disponibles
-        self.variables_disponibles = []
-        if not np.isnan(self.nivel_nitrogeno):
-            self.variables_disponibles.append('nivel_nitrogeno')
-        if not np.isnan(self.nivel_fosforo):
-            self.variables_disponibles.append('nivel_fosforo')
+        # Determinar vars disponibles
+        self.available_vars = []
+        if not np.isnan(self.nitrogen_level):
+            self.available_vars.append('nitrogen_level')
+        if not np.isnan(self.phosphorus_level):
+            self.available_vars.append('phosphorus_level')
 
-        # Crear el sistema difuso según las variables disponibles
-        self._crear_sistema_difuso()
+        # Crear el sistema difuso según las vars disponibles
+        self._create_fuzzy_system()
 
-    def _crear_sistema_difuso(self):
+    def _create_fuzzy_system(self):
         # Definir la variable de salida
-        self.nivel_nutrientes_universe = np.arange(0, 1.01, 0.01)
-        self.nivel_nutrientes_var = ctrl.Consequent(self.nivel_nutrientes_universe, 'nivel_nutrientes')
-        self.nivel_nutrientes_var['BAJO'] = fuzz.trapmf(self.nivel_nutrientes_var.universe, [0, 0, 0.2, 0.4])
-        self.nivel_nutrientes_var['MODERADO'] = fuzz.trimf(self.nivel_nutrientes_var.universe, [0.3, 0.5, 0.7])
-        self.nivel_nutrientes_var['ALTO'] = fuzz.trimf(self.nivel_nutrientes_var.universe, [0.6, 0.75, 0.9])
-        self.nivel_nutrientes_var['MUY ALTO'] = fuzz.trapmf(self.nivel_nutrientes_var.universe, [0.85, 0.95, 1, 1])
+        self.nutrient_level_universe = np.arange(0, 1.01, 0.01)
+        self.nutrient_level_var = ctrl.Consequent(self.nutrient_level_universe, 'nutrient_level')
+        self.nutrient_level_var['LOW'] = fuzz.trapmf(self.nutrient_level_var.universe, [0, 0, 0.2, 0.4])
+        self.nutrient_level_var['MODERATE'] = fuzz.trimf(self.nutrient_level_var.universe, [0.3, 0.5, 0.7])
+        self.nutrient_level_var['HIGH'] = fuzz.trimf(self.nutrient_level_var.universe, [0.6, 0.75, 0.9])
+        self.nutrient_level_var['VERY HIGH'] = fuzz.trapmf(self.nutrient_level_var.universe, [0.85, 0.95, 1, 1])
 
         self.rules = []
-        self.variables = {}
+        self.vars = {}
 
-        # Definir variables difusas según las variables disponibles
-        if 'nivel_nitrogeno' in self.variables_disponibles:
-            # Definir el universo de discurso para nivel_nitrogeno
-            self.nivel_nitrogeno_universe = np.arange(0, 1.01, 0.01)
-            self.nivel_nitrogeno_var = ctrl.Antecedent(self.nivel_nitrogeno_universe, 'nivel_nitrogeno')
-            self.nivel_nitrogeno_var['BAJO'] = fuzz.trapmf(self.nivel_nitrogeno_var.universe, [0, 0, 0.15, 0.3])
-            self.nivel_nitrogeno_var['MODERADO'] = fuzz.trimf(self.nivel_nitrogeno_var.universe, [0.25, 0.4, 0.55])
-            self.nivel_nitrogeno_var['ALTO'] = fuzz.trimf(self.nivel_nitrogeno_var.universe, [0.5, 0.65, 0.8])
-            self.nivel_nitrogeno_var['MUY ALTO'] = fuzz.trapmf(self.nivel_nitrogeno_var.universe, [0.75, 0.85, 1, 1])
-            self.variables['nivel_nitrogeno'] = self.nivel_nitrogeno_var
+        # Definir vars difusas según las vars disponibles
+        if 'nitrogen_level' in self.available_vars:
+            # Definir el universo de discurso para nitrogen_level
+            self.nitrogen_level_universe = np.arange(0, 1.01, 0.01)
+            self.nitrogen_level_var = ctrl.Antecedent(self.nitrogen_level_universe, 'nitrogen_level')
+            self.nitrogen_level_var['LOW'] = fuzz.trapmf(self.nitrogen_level_var.universe, [0, 0, 0.15, 0.3])
+            self.nitrogen_level_var['MODERATE'] = fuzz.trimf(self.nitrogen_level_var.universe, [0.25, 0.4, 0.55])
+            self.nitrogen_level_var['HIGH'] = fuzz.trimf(self.nitrogen_level_var.universe, [0.5, 0.65, 0.8])
+            self.nitrogen_level_var['VERY HIGH'] = fuzz.trapmf(self.nitrogen_level_var.universe, [0.75, 0.85, 1, 1])
+            self.vars['nitrogen_level'] = self.nitrogen_level_var
 
-        if 'nivel_fosforo' in self.variables_disponibles:
-            # Definir el universo de discurso para nivel_fosforo
-            self.nivel_fosforo_universe = np.arange(0, 1.01, 0.01)
-            self.nivel_fosforo_var = ctrl.Antecedent(self.nivel_fosforo_universe, 'nivel_fosforo')
-            self.nivel_fosforo_var['BAJO'] = fuzz.trapmf(self.nivel_fosforo_var.universe, [0, 0, 0.15, 0.3])
-            self.nivel_fosforo_var['MODERADO'] = fuzz.trimf(self.nivel_fosforo_var.universe, [0.25, 0.4, 0.55])
-            self.nivel_fosforo_var['ALTO'] = fuzz.trimf(self.nivel_fosforo_var.universe, [0.5, 0.65, 0.8])
-            self.nivel_fosforo_var['MUY ALTO'] = fuzz.trapmf(self.nivel_fosforo_var.universe, [0.75, 0.85, 1, 1])
-            self.variables['nivel_fosforo'] = self.nivel_fosforo_var
+        if 'phosphorus_level' in self.available_vars:
+            # Definir el universo de discurso para phosphorus_level
+            self.phosphorus_level_universe = np.arange(0, 1.01, 0.01)
+            self.phosphorus_level_var = ctrl.Antecedent(self.phosphorus_level_universe, 'phosphorus_level')
+            self.phosphorus_level_var['LOW'] = fuzz.trapmf(self.phosphorus_level_var.universe, [0, 0, 0.15, 0.3])
+            self.phosphorus_level_var['MODERATE'] = fuzz.trimf(self.phosphorus_level_var.universe, [0.25, 0.4, 0.55])
+            self.phosphorus_level_var['HIGH'] = fuzz.trimf(self.phosphorus_level_var.universe, [0.5, 0.65, 0.8])
+            self.phosphorus_level_var['VERY HIGH'] = fuzz.trapmf(self.phosphorus_level_var.universe, [0.75, 0.85, 1, 1])
+            self.vars['phosphorus_level'] = self.phosphorus_level_var
 
-        # Definir las reglas difusas según las variables disponibles
-        self._definir_reglas()
+        # Definir las reglas difusas según las vars disponibles
+        self._define_rules()
 
         # Crear el sistema de control
         self.control_system = ctrl.ControlSystem(self.rules)
         self.simulation = ctrl.ControlSystemSimulation(self.control_system)
 
-    def _definir_reglas(self):
-        # Reglas basadas en las variables disponibles
-        if 'nivel_nitrogeno' in self.variables and 'nivel_fosforo' in self.variables:
-            # Ambas variables están disponibles
-            nitrogeno = self.variables['nivel_nitrogeno']
-            fosforo = self.variables['nivel_fosforo']
+    def _define_rules(self):
+        # Reglas basadas en las vars disponibles
+        if 'nitrogen_level' in self.vars and 'phosphorus_level' in self.vars:
+            # Ambas vars están disponibles
+            nitrogen_level = self.vars['nitrogen_level']
+            phosphorus_level = self.vars['phosphorus_level']
 
             # Reglas detalladas
-            # Ambos BAJO
-            self.rules.append(ctrl.Rule(nitrogeno['BAJO'] & fosforo['BAJO'], self.nivel_nutrientes_var['BAJO']))
+            # Ambos LOW
+            self.rules.append(ctrl.Rule(nitrogen_level['LOW'] & phosphorus_level['LOW'], self.nutrient_level_var['LOW']))
 
-            # Ambos MODERADO
-            self.rules.append(ctrl.Rule(nitrogeno['MODERADO'] & fosforo['MODERADO'], self.nivel_nutrientes_var['MODERADO']))
+            # Ambos MODERATE
+            self.rules.append(ctrl.Rule(nitrogen_level['MODERATE'] & phosphorus_level['MODERATE'], self.nutrient_level_var['MODERATE']))
 
-            # Ambos ALTO
-            self.rules.append(ctrl.Rule(nitrogeno['ALTO'] & fosforo['ALTO'], self.nivel_nutrientes_var['MUY ALTO']))
+            # Ambos HIGH
+            self.rules.append(ctrl.Rule(nitrogen_level['HIGH'] & phosphorus_level['HIGH'], self.nutrient_level_var['VERY HIGH']))
 
-            # Ambos MUY_ALTO
-            self.rules.append(ctrl.Rule(nitrogeno['MUY ALTO'] & fosforo['MUY ALTO'], self.nivel_nutrientes_var['MUY ALTO']))
+            # Ambos VERY_HIGH
+            self.rules.append(ctrl.Rule(nitrogen_level['VERY HIGH'] & phosphorus_level['VERY HIGH'], self.nutrient_level_var['VERY HIGH']))
 
-            # Uno ALTO y otro MODERADO
+            # Uno HIGH y otro MODERATE
             self.rules.append(ctrl.Rule(
-                (nitrogeno['ALTO'] & fosforo['MODERADO']) | (nitrogeno['MODERADO'] & fosforo['ALTO']),
-                self.nivel_nutrientes_var['ALTO']
+                (nitrogen_level['HIGH'] & phosphorus_level['MODERATE']) | (nitrogen_level['MODERATE'] & phosphorus_level['HIGH']),
+                self.nutrient_level_var['HIGH']
             ))
 
-            # Uno MUY_ALTO y otro ALTO
+            # Uno VERY_HIGH y otro HIGH
             self.rules.append(ctrl.Rule(
-                (nitrogeno['MUY ALTO'] & fosforo['ALTO']) | (nitrogeno['ALTO'] & fosforo['MUY ALTO']),
-                self.nivel_nutrientes_var['MUY ALTO']
+                (nitrogen_level['VERY HIGH'] & phosphorus_level['HIGH']) | (nitrogen_level['HIGH'] & phosphorus_level['VERY HIGH']),
+                self.nutrient_level_var['VERY HIGH']
             ))
 
-            # Uno MODERADO y otro BAJO
+            # Uno MODERATE y otro LOW
             self.rules.append(ctrl.Rule(
-                (nitrogeno['MODERADO'] & fosforo['BAJO']) | (nitrogeno['BAJO'] & fosforo['MODERADO']),
-                self.nivel_nutrientes_var['MODERADO']
+                (nitrogen_level['MODERATE'] & phosphorus_level['LOW']) | (nitrogen_level['LOW'] & phosphorus_level['MODERATE']),
+                self.nutrient_level_var['MODERATE']
             ))
 
-            # Uno ALTO y otro BAJO
+            # Uno HIGH y otro LOW
             self.rules.append(ctrl.Rule(
-                (nitrogeno['ALTO'] & fosforo['BAJO']) | (nitrogeno['BAJO'] & fosforo['ALTO']),
-                self.nivel_nutrientes_var['MODERADO']
+                (nitrogen_level['HIGH'] & phosphorus_level['LOW']) | (nitrogen_level['LOW'] & phosphorus_level['HIGH']),
+                self.nutrient_level_var['MODERATE']
             ))
 
-            # Uno MUY_ALTO y otro BAJO
+            # Uno VERY_HIGH y otro LOW
             self.rules.append(ctrl.Rule(
-                (nitrogeno['MUY ALTO'] & fosforo['BAJO']) | (nitrogeno['BAJO'] & fosforo['MUY ALTO']),
-                self.nivel_nutrientes_var['MODERADO']
+                (nitrogen_level['VERY HIGH'] & phosphorus_level['LOW']) | (nitrogen_level['LOW'] & phosphorus_level['VERY HIGH']),
+                self.nutrient_level_var['MODERATE']
             ))
 
-            # Uno MUY_ALTO y otro MODERADO
+            # Uno VERY_HIGH y otro MODERATE
             self.rules.append(ctrl.Rule(
-                (nitrogeno['MUY ALTO'] & fosforo['MODERADO']) | (nitrogeno['MODERADO'] & fosforo['MUY ALTO']),
-                self.nivel_nutrientes_var['ALTO']
+                (nitrogen_level['VERY HIGH'] & phosphorus_level['MODERATE']) | (nitrogen_level['MODERATE'] & phosphorus_level['VERY HIGH']),
+                self.nutrient_level_var['HIGH']
             ))
 
             # Si la diferencia es más de un nivel, el nivel es el más bajo
             self.rules.append(ctrl.Rule(
-                (nitrogeno['MUY ALTO'] & fosforo['BAJO']) | (nitrogeno['BAJO'] & fosforo['MUY ALTO']),
-                self.nivel_nutrientes_var['MODERADO']
+                (nitrogen_level['VERY HIGH'] & phosphorus_level['LOW']) | (nitrogen_level['LOW'] & phosphorus_level['VERY HIGH']),
+                self.nutrient_level_var['MODERATE']
             ))
 
         else:
-            # Si solo una variable está disponible, el nivel de nutrientes es el mismo que la variable disponible
-            for var_name in ['nivel_nitrogeno', 'nivel_fosforo']:
-                if var_name in self.variables:
-                    antecedent = self.variables[var_name]
-                    self.rules.append(ctrl.Rule(antecedent['BAJO'], self.nivel_nutrientes_var['BAJO']))
-                    self.rules.append(ctrl.Rule(antecedent['MODERADO'], self.nivel_nutrientes_var['MODERADO']))
-                    self.rules.append(ctrl.Rule(antecedent['ALTO'], self.nivel_nutrientes_var['ALTO']))
-                    self.rules.append(ctrl.Rule(antecedent['MUY ALTO'], self.nivel_nutrientes_var['MUY ALTO']))
+            # Si solo una variable está disponible, el nivel de nutrient_level es el mismo que la variable disponible
+            for var_name in ['nitrogen_level', 'phosphorus_level']:
+                if var_name in self.vars:
+                    antecedent = self.vars[var_name]
+                    self.rules.append(ctrl.Rule(antecedent['LOW'], self.nutrient_level_var['LOW']))
+                    self.rules.append(ctrl.Rule(antecedent['MODERATE'], self.nutrient_level_var['MODERATE']))
+                    self.rules.append(ctrl.Rule(antecedent['HIGH'], self.nutrient_level_var['HIGH']))
+                    self.rules.append(ctrl.Rule(antecedent['VERY HIGH'], self.nutrient_level_var['VERY HIGH']))
 
-    def calcular_inferencia(self):
-        # Asignar los valores de entrada disponibles
-        if 'nivel_nitrogeno' in self.variables:
-            self.simulation.input['nivel_nitrogeno'] = self.nivel_nitrogeno
-        if 'nivel_fosforo' in self.variables:
-            self.simulation.input['nivel_fosforo'] = self.nivel_fosforo
+    def calculate_inference(self):
+        # Asignar los valuees de entrada disponibles
+        if 'nitrogen_level' in self.vars:
+            self.simulation.input['nitrogen_level'] = self.nitrogen_level
+        if 'phosphorus_level' in self.vars:
+            self.simulation.input['phosphorus_level'] = self.phosphorus_level
 
         try:
             # Realizar la inferencia
             self.simulation.compute()
 
             # Obtener el resultado
-            self.nivel_nutrientes = self.simulation.output['nivel_nutrientes']
+            self.nutrient_level = self.simulation.output['nutrient_level']
         except Exception as e:
             raise ValueError(f"Error al calcular la inferencia: {e}")
 
-        # Determinar variables usadas y confianza
-        if 'nivel_nitrogeno' in self.variables and 'nivel_fosforo' in self.variables:
-            variables_usadas = 'NITROGENO_FOSFORO'
-            confianza = 1.0
+        # Determinar vars usadas y confidence
+        if 'nitrogen_level' in self.vars and 'phosphorus_level' in self.vars:
+            used_vars = 'NITROGEN_PHOSPHORUS'
+            confidence = 1.0
         else:
-            variables_usadas = 'NITROGENO' if 'nivel_nitrogeno' in self.variables else 'FOSFORO'
-            confianza = 0.5
+            used_vars = 'NITROGEN' if 'nitrogen_level' in self.vars else 'PHOSPHORUS'
+            confidence = 0.5
 
-        return (variables_usadas, confianza)
+        return (used_vars, confidence)
 
-    def obtener_etiqueta(self):
-        if np.isnan(self.nivel_nutrientes):
-            raise ValueError("No se ha calculado la inferencia de nivel de nutrientes.")
+    def get_label(self):
+        if np.isnan(self.nutrient_level):
+            raise ValueError("No se ha calculado la inferencia de nivel de nutrient_level.")
 
-        # Determinar la etiqueta con mayor grado de pertenencia
-        grados_pertenencia = {}
-        for etiqueta in self.nivel_nutrientes_var.terms:
-            funcion_pertenencia = self.nivel_nutrientes_var[etiqueta].mf
-            grado = fuzz.interp_membership(self.nivel_nutrientes_var.universe, funcion_pertenencia, self.nivel_nutrientes)
-            grados_pertenencia[etiqueta] = grado
+        # Determinar la label con mayor degree de pertenencia
+        membership_degrees = {}
+        for label in self.nutrient_level_var.terms:
+            membership_function = self.nutrient_level_var[label].mf
+            degree = fuzz.interp_membership(self.nutrient_level_var.universe, membership_function, self.nutrient_level)
+            membership_degrees[label] = degree
 
-        etiqueta_predicha = max(grados_pertenencia, key=grados_pertenencia.get)
-        return etiqueta_predicha
+        predicted_label = max(membership_degrees, key=membership_degrees.get)
+        return predicted_label

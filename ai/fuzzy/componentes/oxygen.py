@@ -2,62 +2,62 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
-class BalanceOxigeno:
+class OxygenBalance:
     def __init__(self, custom_vars=dict(), **kwargs):
         self.custom_vars = custom_vars
         self.inputs = kwargs
         self.available_vars = {k: v for k, v in self.inputs.items() if not np.isnan(v)}
-        self.balance_oxigeno = np.nan
+        self.oxygen_balance = np.nan
 
-        # Orden de prioridad de las variables
-        self.priority_variables = [
+        # Orden de prioridad de las vars
+        self.priority_vars = [
             'O2_Dis', 'BOD', 'COD', 'PV'
         ]
 
-        self.available_vars = {k: v for k, v in self.available_vars.items() if k in self.priority_variables}
+        self.available_vars = {k: v for k, v in self.available_vars.items() if k in self.priority_vars}
 
         if not self.available_vars:
-            raise ValueError(f"No se encontraron variables válidas para inferencia.")
+            raise ValueError(f"No se encontraron vars válidas para inferencia.")
 
-        self._init_variables()
-        self._crear_sistema_difuso()
+        self._init_vars()
+        self._create_fuzzy_system()
 
-    def _init_variables(self):
+    def _init_vars(self):
         self.base_vars = dict(
             O2_Dis=dict(
                 universe = np.arange(0, 15.1, 0.1),  # Rango típico de 0 a 15 mg/L
                 mf_definitions = {
-                    'BAJO': {'type': 'trapmf', 'params': [0, 0, 2, 5]},
-                    'MODERADO': {'type': 'trimf', 'params': [4, 6, 8]},
-                    'ALTO': {'type': 'trimf', 'params': [7, 9, 11]},
-                    'MUY ALTO': {'type': 'trapmf', 'params': [10, 12, 15, 15]}
+                    'LOW': {'type': 'trapmf', 'params': [0, 0, 2, 5]},
+                    'MODERATE': {'type': 'trimf', 'params': [4, 6, 8]},
+                    'HIGH': {'type': 'trimf', 'params': [7, 9, 11]},
+                    'VERY HIGH': {'type': 'trapmf', 'params': [10, 12, 15, 15]}
                 }
             ),
             BOD=dict(
                 universe = np.arange(0, 30.1, 0.1),  # Rango típico de 0 a 30 mg/L
                 mf_definitions = {
-                    'BAJO': {'type': 'trapmf', 'params': [0, 0, 2, 5]},
-                    'MODERADO': {'type': 'trimf', 'params': [4, 7, 10]},
-                    'ALTO': {'type': 'trimf', 'params': [9, 15, 20]},
-                    'MUY ALTO': {'type': 'trapmf', 'params': [18, 25, 30, 30]}
+                    'LOW': {'type': 'trapmf', 'params': [0, 0, 2, 5]},
+                    'MODERATE': {'type': 'trimf', 'params': [4, 7, 10]},
+                    'HIGH': {'type': 'trimf', 'params': [9, 15, 20]},
+                    'VERY HIGH': {'type': 'trapmf', 'params': [18, 25, 30, 30]}
                 }
             ),
             COD=dict(
                 universe = np.arange(0, 100.1, 0.1),  # Rango típico de 0 a 100 mg/L
                 mf_definitions = {
-                    'BAJO': {'type': 'trapmf', 'params': [0, 0, 5, 15]},
-                    'MODERADO': {'type': 'trimf', 'params': [10, 25, 40]},
-                    'ALTO': {'type': 'trimf', 'params': [35, 55, 75]},
-                    'MUY ALTO': {'type': 'trapmf', 'params': [70, 85, 100, 100]}
+                    'LOW': {'type': 'trapmf', 'params': [0, 0, 5, 15]},
+                    'MODERATE': {'type': 'trimf', 'params': [10, 25, 40]},
+                    'HIGH': {'type': 'trimf', 'params': [35, 55, 75]},
+                    'VERY HIGH': {'type': 'trapmf', 'params': [70, 85, 100, 100]}
                 }
             ),
             PV=dict(
                 universe = np.arange(0, 50.1, 0.1),  # Rango típico de 0 a 50 mg/L
                 mf_definitions = {
-                    'BAJO': {'type': 'trapmf', 'params': [0, 0, 2, 8]},
-                    'MODERADO': {'type': 'trimf', 'params': [6, 12, 20]},
-                    'ALTO': {'type': 'trimf', 'params': [18, 25, 35]},
-                    'MUY ALTO': {'type': 'trapmf', 'params': [30, 40, 50, 50]}
+                    'LOW': {'type': 'trapmf', 'params': [0, 0, 2, 8]},
+                    'MODERATE': {'type': 'trimf', 'params': [6, 12, 20]},
+                    'HIGH': {'type': 'trimf', 'params': [18, 25, 35]},
+                    'VERY HIGH': {'type': 'trapmf', 'params': [30, 40, 50, 50]}
                 }
             )
         )
@@ -76,14 +76,14 @@ class BalanceOxigeno:
 
         return universe, mf_definitions
 
-    def _crear_sistema_difuso(self):
+    def _create_fuzzy_system(self):
         # Inicializar estructuras
         self.rules = []
-        self.variables = {}
+        self.vars = {}
         self.mf_definitions = {}
         self.calculation_method = None  # Método utilizado para el cálculo
 
-        # Verificar la disponibilidad de variables en orden de prioridad
+        # Verificar la disponibilidad de vars en orden de prioridad
         if 'O2_Dis' in self.available_vars:
             self.calculation_method = 'O2_Dis'
             # Definir variable difusa para O2_Dis
@@ -94,11 +94,11 @@ class BalanceOxigeno:
                     antecedent[label] = fuzz.trapmf(antecedent.universe, params['params'])
                 elif params['type'] == 'trimf':
                     antecedent[label] = fuzz.trimf(antecedent.universe, params['params'])
-            self.variables['O2_Dis'] = antecedent
+            self.vars['O2_Dis'] = antecedent
 
         elif 'BOD' in self.available_vars and 'COD' in self.available_vars:
             self.calculation_method = 'BOD_COD'
-            # Definir variables difusas para BOD y COD
+            # Definir vars difusas para BOD y COD
             universe_bod, mf_definitions_bod = self._get_variable_definitions('BOD')
             antecedent_bod = ctrl.Antecedent(universe_bod, 'BOD')
             for label, params in mf_definitions_bod.items():
@@ -106,7 +106,7 @@ class BalanceOxigeno:
                     antecedent_bod[label] = fuzz.trapmf(antecedent_bod.universe, params['params'])
                 elif params['type'] == 'trimf':
                     antecedent_bod[label] = fuzz.trimf(antecedent_bod.universe, params['params'])
-            self.variables['BOD'] = antecedent_bod
+            self.vars['BOD'] = antecedent_bod
 
             universe_cod, mf_definitions_cod = self._get_variable_definitions('COD')
             antecedent_cod = ctrl.Antecedent(universe_cod, 'COD')
@@ -115,11 +115,11 @@ class BalanceOxigeno:
                     antecedent_cod[label] = fuzz.trapmf(antecedent_cod.universe, params['params'])
                 elif params['type'] == 'trimf':
                     antecedent_cod[label] = fuzz.trimf(antecedent_cod.universe, params['params'])
-            self.variables['COD'] = antecedent_cod
+            self.vars['COD'] = antecedent_cod
 
         elif 'BOD' in self.available_vars and 'PV' in self.available_vars:
             self.calculation_method = 'BOD_PV'
-            # Definir variables difusas para BOD y PV
+            # Definir vars difusas para BOD y PV
             universe_bod, mf_definitions_bod = self._get_variable_definitions('BOD')
             antecedent_bod = ctrl.Antecedent(universe_bod, 'BOD')
             for label, params in mf_definitions_bod.items():
@@ -127,7 +127,7 @@ class BalanceOxigeno:
                     antecedent_bod[label] = fuzz.trapmf(antecedent_bod.universe, params['params'])
                 elif params['type'] == 'trimf':
                     antecedent_bod[label] = fuzz.trimf(antecedent_bod.universe, params['params'])
-            self.variables['BOD'] = antecedent_bod
+            self.vars['BOD'] = antecedent_bod
 
             universe_pv, mf_definitions_pv = self._get_variable_definitions('PV')
             antecedent_pv = ctrl.Antecedent(universe_pv, 'PV')
@@ -136,11 +136,11 @@ class BalanceOxigeno:
                     antecedent_pv[label] = fuzz.trapmf(antecedent_pv.universe, params['params'])
                 elif params['type'] == 'trimf':
                     antecedent_pv[label] = fuzz.trimf(antecedent_pv.universe, params['params'])
-            self.variables['PV'] = antecedent_pv
+            self.vars['PV'] = antecedent_pv
 
         else:
-            # Usar variables individuales en orden de prioridad
-            for var in self.priority_variables:
+            # Usar vars individuales en orden de prioridad
+            for var in self.priority_vars:
                 if var in self.available_vars:
                     self.calculation_method = var
                     universe, mf_definitions = self._get_variable_definitions(var)
@@ -150,59 +150,59 @@ class BalanceOxigeno:
                             antecedent[label] = fuzz.trapmf(antecedent.universe, params['params'])
                         elif params['type'] == 'trimf':
                             antecedent[label] = fuzz.trimf(antecedent.universe, params['params'])
-                    self.variables[var] = antecedent
+                    self.vars[var] = antecedent
                     break
             else:
-                # Si no hay variables disponibles, error
-                raise ValueError("No hay variables válidas disponibles para crear el sistema difuso.")
+                # Si no hay vars disponibles, error
+                raise ValueError("No hay vars válidas disponibles para crear el sistema difuso.")
 
         # Definir variable de salida
-        self.balance_oxigeno_universe = np.arange(0, 1.01, 0.01)
-        self.balance_oxigeno_var = ctrl.Consequent(self.balance_oxigeno_universe, 'balance_oxigeno')
-        self.balance_oxigeno_var['BUENO'] = fuzz.trapmf(self.balance_oxigeno_var.universe, [0, 0, 0.2, 0.4])
-        self.balance_oxigeno_var['MODERADO'] = fuzz.trimf(self.balance_oxigeno_var.universe, [0.3, 0.5, 0.7])
-        self.balance_oxigeno_var['MALO'] = fuzz.trimf(self.balance_oxigeno_var.universe, [0.6, 0.75, 0.9])
-        self.balance_oxigeno_var['MUY MALO'] = fuzz.trapmf(self.balance_oxigeno_var.universe, [0.85, 0.95, 1, 1])
+        self.oxygen_balance_universe = np.arange(0, 1.01, 0.01)
+        self.oxygen_balance_var = ctrl.Consequent(self.oxygen_balance_universe, 'oxygen_balance')
+        self.oxygen_balance_var['GOOD'] = fuzz.trapmf(self.oxygen_balance_var.universe, [0, 0, 0.2, 0.4])
+        self.oxygen_balance_var['MODERATE'] = fuzz.trimf(self.oxygen_balance_var.universe, [0.3, 0.5, 0.7])
+        self.oxygen_balance_var['BAD'] = fuzz.trimf(self.oxygen_balance_var.universe, [0.6, 0.75, 0.9])
+        self.oxygen_balance_var['VERY BAD'] = fuzz.trapmf(self.oxygen_balance_var.universe, [0.85, 0.95, 1, 1])
 
         # Definir reglas difusas basadas en la variable seleccionada
         if self.calculation_method == 'O2_Dis':
             # Reglas basadas en O2_Dis (a mayor oxígeno disuelto, mejor balance)
-            antecedent = self.variables['O2_Dis']
-            self.rules.append(ctrl.Rule(antecedent['BAJO'], self.balance_oxigeno_var['MUY MALO']))
-            self.rules.append(ctrl.Rule(antecedent['MODERADO'], self.balance_oxigeno_var['MALO']))
-            self.rules.append(ctrl.Rule(antecedent['ALTO'], self.balance_oxigeno_var['MODERADO']))
-            self.rules.append(ctrl.Rule(antecedent['MUY ALTO'], self.balance_oxigeno_var['BUENO']))
+            antecedent = self.vars['O2_Dis']
+            self.rules.append(ctrl.Rule(antecedent['LOW'], self.oxygen_balance_var['VERY BAD']))
+            self.rules.append(ctrl.Rule(antecedent['MODERATE'], self.oxygen_balance_var['BAD']))
+            self.rules.append(ctrl.Rule(antecedent['HIGH'], self.oxygen_balance_var['MODERATE']))
+            self.rules.append(ctrl.Rule(antecedent['VERY HIGH'], self.oxygen_balance_var['GOOD']))
         elif self.calculation_method == 'BOD_COD':
             # Reglas combinadas basadas en BOD y COD
-            antecedent_bod = self.variables['BOD']
-            antecedent_cod = self.variables['COD']
-            self.rules.append(ctrl.Rule(antecedent_bod['BAJO'] & antecedent_cod['BAJO'], self.balance_oxigeno_var['BUENO']))
-            self.rules.append(ctrl.Rule(antecedent_bod['MODERADO'] | antecedent_cod['MODERADO'], self.balance_oxigeno_var['MODERADO']))
-            self.rules.append(ctrl.Rule(antecedent_bod['ALTO'] | antecedent_cod['ALTO'], self.balance_oxigeno_var['MALO']))
-            self.rules.append(ctrl.Rule(antecedent_bod['MUY ALTO'] | antecedent_cod['MUY ALTO'], self.balance_oxigeno_var['MUY MALO']))
+            antecedent_bod = self.vars['BOD']
+            antecedent_cod = self.vars['COD']
+            self.rules.append(ctrl.Rule(antecedent_bod['LOW'] & antecedent_cod['LOW'], self.oxygen_balance_var['GOOD']))
+            self.rules.append(ctrl.Rule(antecedent_bod['MODERATE'] | antecedent_cod['MODERATE'], self.oxygen_balance_var['MODERATE']))
+            self.rules.append(ctrl.Rule(antecedent_bod['HIGH'] | antecedent_cod['HIGH'], self.oxygen_balance_var['BAD']))
+            self.rules.append(ctrl.Rule(antecedent_bod['VERY HIGH'] | antecedent_cod['VERY HIGH'], self.oxygen_balance_var['VERY BAD']))
         elif self.calculation_method == 'BOD_PV':
             # Reglas combinadas basadas en BOD y PV
-            antecedent_bod = self.variables['BOD']
-            antecedent_pv = self.variables['PV']
-            self.rules.append(ctrl.Rule(antecedent_bod['BAJO'] & antecedent_pv['BAJO'], self.balance_oxigeno_var['BUENO']))
-            self.rules.append(ctrl.Rule(antecedent_bod['MODERADO'] | antecedent_pv['MODERADO'], self.balance_oxigeno_var['MODERADO']))
-            self.rules.append(ctrl.Rule(antecedent_bod['ALTO'] | antecedent_pv['ALTO'], self.balance_oxigeno_var['MALO']))
-            self.rules.append(ctrl.Rule(antecedent_bod['MUY ALTO'] | antecedent_pv['MUY ALTO'], self.balance_oxigeno_var['MUY MALO']))
+            antecedent_bod = self.vars['BOD']
+            antecedent_pv = self.vars['PV']
+            self.rules.append(ctrl.Rule(antecedent_bod['LOW'] & antecedent_pv['LOW'], self.oxygen_balance_var['GOOD']))
+            self.rules.append(ctrl.Rule(antecedent_bod['MODERATE'] | antecedent_pv['MODERATE'], self.oxygen_balance_var['MODERATE']))
+            self.rules.append(ctrl.Rule(antecedent_bod['HIGH'] | antecedent_pv['HIGH'], self.oxygen_balance_var['BAD']))
+            self.rules.append(ctrl.Rule(antecedent_bod['VERY HIGH'] | antecedent_pv['VERY HIGH'], self.oxygen_balance_var['VERY BAD']))
         else:
             # Reglas basadas en la variable individual seleccionada
             var_name = self.calculation_method
-            antecedent = self.variables[var_name]
-            # Para BOD, COD y PV, mayor valor implica peor balance
-            self.rules.append(ctrl.Rule(antecedent['BAJO'], self.balance_oxigeno_var['BUENO']))
-            self.rules.append(ctrl.Rule(antecedent['MODERADO'], self.balance_oxigeno_var['MODERADO']))
-            self.rules.append(ctrl.Rule(antecedent['ALTO'], self.balance_oxigeno_var['MALO']))
-            self.rules.append(ctrl.Rule(antecedent['MUY ALTO'], self.balance_oxigeno_var['MUY MALO']))
+            antecedent = self.vars[var_name]
+            # Para BOD, COD y PV, mayor value implica peor balance
+            self.rules.append(ctrl.Rule(antecedent['LOW'], self.oxygen_balance_var['GOOD']))
+            self.rules.append(ctrl.Rule(antecedent['MODERATE'], self.oxygen_balance_var['MODERATE']))
+            self.rules.append(ctrl.Rule(antecedent['HIGH'], self.oxygen_balance_var['BAD']))
+            self.rules.append(ctrl.Rule(antecedent['VERY HIGH'], self.oxygen_balance_var['VERY BAD']))
 
         # Crear el sistema de control
         self.control_system = ctrl.ControlSystem(self.rules)
         self.simulation = ctrl.ControlSystemSimulation(self.control_system)
 
-    def calcular_inferencia(self):
+    def calculate_inference(self):
         if not hasattr(self, 'simulation'):
             raise ValueError("No ha sido posible crear el sistema de control.")
 
@@ -230,30 +230,30 @@ class BalanceOxigeno:
 
             # Realizar la computación
             self.simulation.compute()
-            self.balance_oxigeno = self.simulation.output['balance_oxigeno']
+            self.oxygen_balance = self.simulation.output['oxygen_balance']
 
         except Exception as e:
             raise ValueError(f"Error al calcular la inferencia: {e}")
 
         return self.calculation_method
 
-    def obtener_etiqueta(self):
-        if np.isnan(self.balance_oxigeno):
+    def get_label(self):
+        if np.isnan(self.oxygen_balance):
             raise ValueError("El balance de oxígeno no está disponible.")
 
-        # Crear un diccionario para almacenar los grados de pertenencia
-        grados_pertenencia = {}
+        # Crear un diccionario para almacenar los degrees de pertenencia
+        membership_degrees = {}
 
-        # Para cada etiqueta en la variable de salida
-        for etiqueta in self.balance_oxigeno_var.terms:
+        # Para cada label en la variable de salida
+        for label in self.oxygen_balance_var.terms:
             # Obtener la función de pertenencia correspondiente
-            funcion_pertenencia = self.balance_oxigeno_var[etiqueta].mf
-            # Calcular el grado de pertenencia del valor de salida en esta función
-            grado = fuzz.interp_membership(self.balance_oxigeno_var.universe, funcion_pertenencia, self.balance_oxigeno)
-            # Almacenar el grado en el diccionario
-            grados_pertenencia[etiqueta] = grado
+            membership_function = self.oxygen_balance_var[label].mf
+            # Calcular el degree de pertenencia del value de salida en esta función
+            degree = fuzz.interp_membership(self.oxygen_balance_var.universe, membership_function, self.oxygen_balance)
+            # Almacenar el degree en el diccionario
+            membership_degrees[label] = degree
 
-        # Encontrar la etiqueta con el mayor grado de pertenencia
-        etiqueta_predicha = max(grados_pertenencia, key=grados_pertenencia.get)
+        # Encontrar la label con el mayor degree de pertenencia
+        predicted_label = max(membership_degrees, key=membership_degrees.get)
 
-        return etiqueta_predicha
+        return predicted_label

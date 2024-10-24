@@ -268,9 +268,7 @@ def download_study_results(
     if study.status != StudyStatus.TRAINED:
         raise HTTPException(status_code=400, detail="El estudio aún no ha sido entrenado")
 
-    # Definir los posibles nombres de columnas
-    spanish_columns = ["eutrofizacion", "quimicas", "fisicas", "adicionales"]
-    english_columns = ["eutrophication", "chemical", "physical", "additional"]
+    columns = ["eutrophication_level", "chemical_conditions", "physical_conditions", "additional_conditions"]
 
     # Construir las rutas a los archivos
     user_data_dir = os.path.join(settings.USER_DATA, str(current_user.id))
@@ -291,20 +289,14 @@ def download_study_results(
         raise HTTPException(status_code=500, detail="Error al leer los archivos de resultados")
 
     # Seleccionar las columnas disponibles
-    available_columns = [col for col in spanish_columns if col in df_fuzzy.columns]
+    available_columns = [col for col in columns if col in df_fuzzy.columns]
     if not available_columns:
         raise HTTPException(status_code=400, detail="No hay columnas disponibles en los resultados")
 
-    # Renombrar las columnas al inglés
-    column_mapping = {spanish: english for spanish, english in zip(spanish_columns, english_columns)}
-    df_fuzzy.rename(columns=column_mapping, inplace=True)
-    df_fuzzy_tags.rename(columns=column_mapping, inplace=True)
-
     # Crear columnas de tags
     for col in available_columns:
-        english_col = column_mapping[col]
-        if english_col in df_fuzzy_tags.columns:
-            df_fuzzy[english_col + "_tag"] = df_fuzzy_tags[english_col]
+        if col in df_fuzzy_tags.columns:
+            df_fuzzy[col + "_tag"] = df_fuzzy_tags[col]
         else:
             # Si la columna de tag no existe, podemos omitirla o manejar el error
             pass
@@ -312,10 +304,9 @@ def download_study_results(
     # Unificar las columnas disponibles
     result_columns = []
     for col in available_columns:
-        english_col = column_mapping[col]
-        result_columns.append(english_col)
-        if english_col + "_tag" in df_fuzzy.columns:
-            result_columns.append(english_col + "_tag")
+        result_columns.append(col)
+        if col + "_tag" in df_fuzzy.columns:
+            result_columns.append(col + "_tag")
 
     # Seleccionar las columnas finales
     df_result = df_fuzzy[result_columns]
@@ -357,8 +348,7 @@ def get_study_results(
         raise HTTPException(status_code=400, detail="El estudio aún no ha sido entrenado")
 
     # Definir los posibles nombres de columnas
-    spanish_columns = ["eutrofizacion", "quimicas", "fisicas", "adicionales"]
-    english_columns = ["eutrophication", "chemical", "physical", "additional"]
+    columns = ["eutrophication_level", "chemical_conditions", "physical_conditions", "additional_conditions"]
 
     # Construir las rutas a los archivos
     user_data_dir = os.path.join(settings.USER_DATA, str(current_user.id))
@@ -379,28 +369,21 @@ def get_study_results(
         raise HTTPException(status_code=500, detail="Error al leer los archivos de resultados")
 
     # Seleccionar las columnas disponibles
-    available_columns = [col for col in spanish_columns if col in df_fuzzy.columns]
+    available_columns = [col for col in columns if col in df_fuzzy.columns]
     if not available_columns:
         raise HTTPException(status_code=400, detail="No hay columnas disponibles en los resultados")
 
-    # Renombrar las columnas al inglés
-    column_mapping = {spanish: english for spanish, english in zip(spanish_columns, english_columns)}
-    df_fuzzy.rename(columns=column_mapping, inplace=True)
-    df_fuzzy_tags.rename(columns=column_mapping, inplace=True)
-
     # Crear columnas de tags
     for col in available_columns:
-        english_col = column_mapping[col]
-        if english_col in df_fuzzy_tags.columns:
-            df_fuzzy[english_col + "_tag"] = df_fuzzy_tags[english_col]
+        if col in df_fuzzy_tags.columns:
+            df_fuzzy[col + "_tag"] = df_fuzzy_tags[col]
 
     # Unificar las columnas disponibles
     result_columns = []
     for col in available_columns:
-        english_col = column_mapping[col]
-        result_columns.append(english_col)
-        if english_col + "_tag" in df_fuzzy.columns:
-            result_columns.append(english_col + "_tag")
+        result_columns.append(col)
+        if col + "_tag" in df_fuzzy.columns:
+            result_columns.append(col + "_tag")
 
     # Seleccionar las columnas finales
     df_result = df_fuzzy[result_columns]

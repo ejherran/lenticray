@@ -27,39 +27,39 @@ def execute(
     fuz_tags = {
         feature: [] for feature in features
     }
-    fuz_tags['eutrofizacion_inferida'] = []
+    fuz_tags['inferred_eutrophication_level_tag'] = []
 
     for i in range(predictions.shape[0]):
 
-        quimicas = predictions.iloc[i]['quimicas'] if 'quimicas' in features else np.nan
-        fisicas = predictions.iloc[i]['fisicas'] if 'fisicas' in features else np.nan
-        adicionales = predictions.iloc[i]['adicionales'] if 'adicionales' in features else np.nan
+        chemical_conditions = predictions.iloc[i]['chemical_conditions'] if 'chemical_conditions' in features else np.nan
+        physical_conditions = predictions.iloc[i]['physical_conditions'] if 'physical_conditions' in features else np.nan
+        additional_conditions = predictions.iloc[i]['additional_conditions'] if 'additional_conditions' in features else np.nan
 
-        a = eutrophication.NivelEutrofizacion(
-            condiciones_quimicas=quimicas,
-            condiciones_fisicas=fisicas,
-            condiciones_adicionales=adicionales
+        a = eutrophication.EutrophicationLevel(
+            chemical_conditions=chemical_conditions,
+            physical_conditions=physical_conditions,
+            additional_conditions=additional_conditions
         )
-        a.calcular_inferencia()
-        fuz_tags['eutrofizacion_inferida'].append(a.obtener_etiqueta())
+        a.calculate_inference()
+        fuz_tags['inferred_eutrophication_level_tag'].append(a.get_label())
 
-        a.nivel_eutrofizacion = predictions.iloc[i]['eutrofizacion']
-        fuz_tags['eutrofizacion'].append(a.obtener_etiqueta())
+        a.eutrophication_level = predictions.iloc[i]['eutrophication_level']
+        fuz_tags['eutrophication_level'].append(a.get_label())
 
-        if 'quimicas' in features:
-            a = chemical.CondicionesQuimicas(0.1, 0.1)
-            a.condiciones_quimicas = predictions.iloc[i]['quimicas']
-            fuz_tags['quimicas'].append(a.obtener_etiqueta())
+        if 'chemical_conditions' in features:
+            a = chemical.ChemicalConditions(0.1, 0.1)
+            a.chemical_conditions = predictions.iloc[i]['chemical_conditions']
+            fuz_tags['chemical_conditions'].append(a.get_label())
 
-        if 'fisicas' in features:
-            a = physical.CondicionesFisicas(0.1, 0.1)
-            a.condiciones = predictions.iloc[i]['fisicas']
-            fuz_tags['fisicas'].append(a.obtener_etiqueta())
+        if 'physical_conditions' in features:
+            a = physical.PhysicalConditions(0.1, 0.1)
+            a.physical_conditions = predictions.iloc[i]['physical_conditions']
+            fuz_tags['physical_conditions'].append(a.get_label())
 
-        if 'adicionales' in features:
-            a = aditional.CondicionesAdicionales(**{'TEMP': 0.1, 'PH': 0.1})
-            a.condiciones = predictions.iloc[i]['adicionales']
-            fuz_tags['adicionales'].append(a.obtener_etiqueta())
+        if 'additional_conditions' in features:
+            a = aditional.AdditionalConditions(**{'TEMP': 0.1, 'PH': 0.1})
+            a.additional_conditions = predictions.iloc[i]['additional_conditions']
+            fuz_tags['additional_conditions'].append(a.get_label())
 
     fuz_tags = pd.DataFrame(fuz_tags)
     predictions.to_parquet(config.output_file)

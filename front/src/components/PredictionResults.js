@@ -21,18 +21,23 @@ function PredictionResults() {
 
     // Mapeo de etiquetas a valores numéricos
     const labelToValue = {
-        'OLIGOTRÓFICO': 1,
-        'MESOTRÓFICO': 2,
-        'EUTRÓFICO': 3,
-        'HIPEREUTRÓFICO': 4,
+        'OLIGOTROPHIC': 1,
+        'MESOTROPHIC': 2,
+        'EUTROPHIC': 3,
+        'HYPEREUTROPHIC': 4,
     };
 
     const valueToLabel = {
-        1: 'OLIGOTRÓFICO',
-        2: 'MESOTRÓFICO',
-        3: 'EUTRÓFICO',
-        4: 'HIPEREUTRÓFICO',
+        1: 'OLIGOTROPHIC',
+        2: 'MESOTROPHIC',
+        3: 'EUTROPHIC',
+        4: 'HYPEREUTROPHIC',
     };
+
+    const createTitle = (col) => {
+        const title_parts = col.split('_');
+        return title_parts.map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    }
 
     useEffect(() => {
         fetchPrediction();
@@ -55,8 +60,8 @@ function PredictionResults() {
             const response = await api.get(`/predictions/${id}/results`);
             // Añadir índice y mapear etiquetas a valores numéricos
             const dataWithIndex = response.data.map((item, index) => {
-                const eutrophicationValue = labelToValue[item.eutrophication_tag] || null;
-                const eutrophicationInferredValue = labelToValue[item.eutrophication_inferred] || null;
+                const eutrophicationValue = labelToValue[item.eutrophication_level_tag] || null;
+                const eutrophicationInferredValue = labelToValue[item.inferred_eutrophication_level_tag] || null;
                 return {
                     ...item,
                     index: index + 1,
@@ -69,7 +74,7 @@ function PredictionResults() {
             // Obtener las columnas disponibles
             if (response.data.length > 0) {
                 const columns = Object.keys(response.data[0])
-                    .filter((key) => !key.endsWith('_tag') && key !== 'eutrophication_inferred')
+                    .filter((key) => !key.endsWith('_tag') && key !== 'inferred_eutrophication_level')
                     .map((key) => key);
                 setAvailableColumns(columns);
             }
@@ -121,7 +126,7 @@ function PredictionResults() {
             <div>
                 {availableColumns.map((col) => (
                     <div key={col} className="mb-5">
-                        <h4>{col.charAt(0).toUpperCase() + col.slice(1)}</h4>
+                        <h4>{createTitle(col)}</h4>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={results}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -137,13 +142,14 @@ function PredictionResults() {
                                 <Tooltip
                                     formatter={(value, name, props) => {
                                         const tag = props.payload[`${col}_tag`];
-                                        return [`Value: ${value}`, `Tag: ${tag}`];
+                                        return [`Value: ${parseFloat(value).toFixed(4)}`, `Tag: ${tag}`];
                                     }}
                                 />
                                 <Legend />
                                 <Line
                                     type="monotone"
                                     dataKey={col}
+                                    name={createTitle(col)}
                                     stroke="#8884d8"
                                     activeDot={{ r: 8 }}
                                 />
@@ -153,7 +159,7 @@ function PredictionResults() {
                 ))}
 
                 {/* Gráfica adicional comparando 'eutrophication_tag' y 'eutrophication_inferred' */}
-                {results.length > 0 && results[0].eutrophication_inferred && (
+                {results.length > 0 && results[0].inferred_eutrophication_level_tag && (
                     <div className="mb-5">
                         <h4>Comparison of Eutrophication Tags</h4>
                         <ResponsiveContainer width="100%" height={300}>
@@ -162,7 +168,7 @@ function PredictionResults() {
                                 <XAxis
                                     dataKey="index"
                                     label={{
-                                        value: 'Observación',
+                                        value: 'Observation',
                                         position: 'insideBottomRight',
                                         offset: -10,
                                     }}
@@ -183,14 +189,14 @@ function PredictionResults() {
                                 <Line
                                     type="monotone"
                                     dataKey="eutrophication_value"
-                                    name="Eutrophication Tag"
+                                    name="Predicted Eutrophication Level"
                                     stroke="#8884d8"
                                     activeDot={{ r: 8 }}
                                 />
                                 <Line
                                     type="monotone"
                                     dataKey="eutrophication_inferred_value"
-                                    name="Eutrophication Inferred"
+                                    name="Inferred Eutrophication Level"
                                     stroke="#82ca9d"
                                     activeDot={{ r: 8 }}
                                 />
