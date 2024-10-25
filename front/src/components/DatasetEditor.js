@@ -376,7 +376,7 @@ function DatasetEditor() {
 
 
   return (
-    <div>
+    <div className="container mt-4"> 
       <h2>Dataset Editor</h2>
       <button onClick={() => navigate('/datasets')} className="btn btn-secondary mb-2">
         Back to Datasets
@@ -407,6 +407,7 @@ function DatasetEditor() {
           onRowsChange={onRowsChange}
           rowKeyGetter={rowKeyGetter}
           className="rdg-light"
+          style={{ height: '100%' }}
         />
       </div>
       <div className="mt-3">
