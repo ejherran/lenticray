@@ -4,10 +4,10 @@ import { NavLink } from 'react-router-dom';
 
 function Sidebar() {
   const menuItems = [
-    { path: '/', label: 'Home', exact: true },
-    { path: '/projects', label: 'Projects' },
-    { path: '/datasets', label: 'Datasets' },
-    { path: '/studies', label: 'Studies' },
+    { path: '/', label: 'Home', icon: 'bi-house-door', exact: true },
+    { path: '/projects', label: 'Projects', icon: 'bi-briefcase' },
+    { path: '/datasets', label: 'Datasets', icon: 'bi-file-earmark-spreadsheet' },
+    { path: '/studies', label: 'Studies', icon: 'bi-journal' },
   ];
 
   return (
@@ -24,6 +24,7 @@ function Sidebar() {
               })}
               end={item.exact || false}
             >
+              <i className={`bi ${item.icon} me-2`}></i>
               {item.label}
             </NavLink>
           </li>
@@ -35,6 +36,7 @@ function Sidebar() {
               window.location.href = '/change-password';
             }}
           >
+            <i className="bi bi-lock me-2"></i>
             Change Password
           </button>
         </li>
@@ -46,6 +48,7 @@ function Sidebar() {
               window.location.href = '/login';
             }}
           >
+            <i className="bi bi-box-arrow-right me-2"></i>
             Logout
           </button>
         </li>

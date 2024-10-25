@@ -96,7 +96,7 @@ function StudyResults() {
             </button>
             <Link
                 to={`/predictions/${study.id}`}
-                className="btn btn-secondary mb-3"
+                className="btn btn-secondary mb-3 mleft-5"
             >
                 View Predictions
             </Link>
@@ -107,7 +107,7 @@ function StudyResults() {
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={results}>
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="index" label={{ value: 'Observation', position: 'insideBottomRight', offset: -10 }} />
+                                <XAxis dataKey="index" label={{ value: 'Observation', position: 'insideBottomRight', offset: 0 }} />
                                 <YAxis domain={[0, 1]} />
                                 <Tooltip
                                     formatter={(value, name, props) => {

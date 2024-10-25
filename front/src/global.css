@@ -1,18 +1,21 @@
 /* src/components/styles.css */
 
 /* Estilos para el layout */
+
 .d-flex {
-    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .sidebar {
-    width: 200px;
+    /* width: 200px; */
     min-height: 100vh;
-    position: fixed;
+    /* position: fixed; */
+    width: 100%;
 }
 
 .content {
     margin-left: 200px;
+    border: 10px solid blue;
     padding: 20px;
 }
 
@@ -38,4 +41,19 @@
 /* Estilos adicionales */
 body {
     margin: 0;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto; /* Quitar la altura mínima en dispositivos móviles */
+    }
+
+    .offcanvas-body {
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+}
+
+.mleft-5{
+    margin-left: 5px;
 }
