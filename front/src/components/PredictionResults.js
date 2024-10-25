@@ -120,7 +120,7 @@ function PredictionResults() {
             <button onClick={handleDownload} className="btn btn-primary mb-3">
                 Download Results
             </button>
-            <Link to={`/predictions/${prediction.study_id}`} className="btn btn-secondary mb-3">
+            <Link to={`/predictions/${prediction.study_id}`} className="btn btn-secondary mb-3 mleft-5">
                 Back to Predictions
             </Link>
             <div>
@@ -135,7 +135,7 @@ function PredictionResults() {
                                     label={{
                                         value: 'Observation',
                                         position: 'insideBottomRight',
-                                        offset: -10,
+                                        offset: 0,
                                     }}
                                 />
                                 <YAxis domain={[0, 1]} />
@@ -170,7 +170,7 @@ function PredictionResults() {
                                     label={{
                                         value: 'Observation',
                                         position: 'insideBottomRight',
-                                        offset: -10,
+                                        offset: 0,
                                     }}
                                 />
                                 <YAxis

@@ -81,14 +81,6 @@ function PredictionList() {
                                 <td>{prediction.status}</td>
                                 <td>
                                     {/* Mostrar el botón de eliminar solo si el estado es COMPLETE o FAILED */}
-                                    {['COMPLETE', 'FAILED'].includes(prediction.status) && (
-                                        <button
-                                            onClick={() => handleDelete(prediction.id)}
-                                            className="btn btn-sm btn-danger"
-                                        >
-                                            Delete
-                                        </button>
-                                    )}
                                     {prediction.status === 'COMPLETE' && (
                                         <Link
                                             to={`/predictions/results/${prediction.id}`}
@@ -96,6 +88,14 @@ function PredictionList() {
                                         >
                                             View Results
                                         </Link>
+                                    )}
+                                    {['COMPLETE', 'FAILED'].includes(prediction.status) && (
+                                        <button
+                                            onClick={() => handleDelete(prediction.id)}
+                                            className="btn btn-sm btn-danger"
+                                        >
+                                            Delete
+                                        </button>
                                     )}
                                 </td>
                             </tr>
