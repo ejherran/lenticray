@@ -94,7 +94,7 @@ function ProjectEdit() {
         </div>
         {/* Superficie */}
         <div className="mb-3">
-          <label>Area:</label>
+          <label>Area (km<sup>2</sup>):</label>
           <input
             type="number"
             step="any"
@@ -105,7 +105,7 @@ function ProjectEdit() {
         </div>
         {/* Profundidad */}
         <div className="mb-3">
-          <label>Depth:</label>
+          <label>Depth (m):</label>
           <input
             type="number"
             step="any"
@@ -116,7 +116,7 @@ function ProjectEdit() {
         </div>
         {/* Volumen */}
         <div className="mb-3">
-          <label>Volume:</label>
+          <label>Volume (km<sup>3</sup>):</label>
           <input
             type="number"
             step="any"
